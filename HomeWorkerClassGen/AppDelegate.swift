@@ -16,6 +16,22 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
+        
+        //Need to figure out if they have launched the app before.
+            //if they have, they should try to be logged in,
+                //If that succeeds, bring them to the home page
+                //If it does not succeed, they should be prompted to log in, stating their accounthas reason for us to question their identity
+            //Ifthey have not, they should be brought to the onboarding procedure
+        
+        
+        //#LoveSudoCode ***********************
+        
+        let view = WorkView()
+        
+        window?.rootViewController = view
+        
+        window?.makeKeyAndVisible()
+        
         return true
     }
 
