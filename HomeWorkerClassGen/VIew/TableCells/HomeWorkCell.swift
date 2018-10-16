@@ -19,6 +19,8 @@ class HomeWorkCell: UITableViewCell {
         }
     }
     
+    public var width: CGFloat!
+    
     //All of the labels
     var assignmentNameLabel = UILabel()
     var classLabel = UILabel()
@@ -35,34 +37,45 @@ class HomeWorkCell: UITableViewCell {
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         
+        print("making a cell")
+        
+    }
+    
+    private func positionEverything() {
         //change the styling and frames of all of these labels
         //Assignment label
         assignmentNameLabel.font = UIFont.systemFont(ofSize: 20)
         assignmentNameLabel.textAlignment = .left
         assignmentNameLabel.frame = CGRect(x: 12, y: 6, width: 180, height: 30)
+        self.addSubview(assignmentNameLabel)
         
         //Class Label
         classLabel.font = UIFont.systemFont(ofSize: 20)
-        classLabel.textColor = UIColor.init(red: 139, green: 139, blue: 139, alpha: 1.0)
+        classLabel.textColor = UIColor(red: 139/255, green: 139/255, blue: 139/255, alpha: 1.0)
         classLabel.textAlignment = .left
         classLabel.frame = CGRect(x: 12, y: 42, width: 180, height: 30)
+        self.addSubview(classLabel)
         
         //Due date label
         dueDateLabel.font = UIFont.systemFont(ofSize: 20)
-        dueDateLabel.textColor = UIColor(red: 139, green: 139, blue: 139, alpha: 1.0)
+        dueDateLabel.textColor = UIColor(red: 139/255, green: 139/255, blue: 139/255, alpha: 1.0)
         dueDateLabel.textAlignment = .right
-        dueDateLabel.frame = CGRect(x: self.frame.width - 170, y: 6, width: 164, height: 30)
+        dueDateLabel.frame = CGRect(x: width - 170, y: 6, width: 164, height: 30)
+        self.addSubview(dueDateLabel)
         
         //Time left label
         timeLeftLabel.font = UIFont.systemFont(ofSize: 20)
         timeLeftLabel.textAlignment = .right
-        timeLeftLabel.frame = CGRect(x: self.frame.width - 136, y: 42, width: 130, height: 30)
+        timeLeftLabel.frame = CGRect(x: width - 206, y: 42, width: 200, height: 30)
+        self.addSubview(timeLeftLabel)
         
         self.addGestureRecognizer(tap)
-        
+
     }
     
     @objc private func showWorkPage() {
+        
+        print("tapped on a cell")
         
         parentViewController.present(destinationViewController, animated: true) {
             //THIS IS GOING TO HAVE TO CHNAGE TO BE CHANGING INTO THE SHOULD RELOAD VARIABLE TO BE ON
@@ -78,8 +91,11 @@ class HomeWorkCell: UITableViewCell {
     
     //Function to change all of the labels in the cell, and to be able to return in
     private func setLabels(_ work: HomeWork) {
+        
+        positionEverything()
+        
         assignmentNameLabel.text = work.assignmentName
-        dueDateLabel.text = "Due: \(String(describing: work.endDateString))"
+        dueDateLabel.text = "Due: " + work.endDateString
         classLabel.text = work.assignee
         
         //Turn the end date string into a date model so I can compare them
@@ -97,7 +113,8 @@ class HomeWorkCell: UITableViewCell {
             timeLeftLabel.textColor = UIColor(red: 255/255, green: 27/255, blue: 27/255, alpha: 1.0)
         }
         
-        timeLeftLabel.text = "\(String(describing: diffInDays)) Days Left"
+        timeLeftLabel.text = "\(String(describing: diffInDays!)) Days Left"
+//        timeLeftLabel.text = "Time left"
         
     }
     

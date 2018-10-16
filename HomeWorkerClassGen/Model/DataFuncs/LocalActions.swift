@@ -169,14 +169,14 @@ struct LocalActions {
     
     struct WorkObjects {
         
-        static func save(newWork: Work) {
+        static func save(newWork: HomeWork) {
             
-            var workArray: [Work]!
+            var workArray: [HomeWork]!
             
             if Disk.exists("work.json", in: .caches) {
                 //Then there is a file to retrieve
                 do {
-                    workArray = try Disk.retrieve("work.json", from: .caches, as: [Work].self)
+                    workArray = try Disk.retrieve("work.json", from: .caches, as: [HomeWork].self)
                     try Disk.remove("work.json", from: .caches)
                 } catch {
                     workArray = []
@@ -190,23 +190,23 @@ struct LocalActions {
             try! Disk.save(workArray, to: .caches, as: "work.json")
         }
         
-        static func fetch(id: String) -> Work {
+        static func fetch(id: String) -> HomeWork {
             let workArray = self.All.fetch()
-            var workToReturn: Work!
+            var workToReturn: HomeWork!
             for work in workArray {
                 if work.uid == id {
                     workToReturn = work
                 }
             }
             if workToReturn == nil {
-                workToReturn = Work("make an assignment", "HomeWorker", false, Date.init(), "randidthatdoesntmatter")
+                workToReturn = HomeWork("make an assignment", "HomeWorker", false, Date.init(), "randidthatdoesntmatter")
             }
             return workToReturn
         }
         
         static func delete(id: String) {
             let workArray = self.All.fetch()
-            var saveArray: [Work]! = workArray
+            var saveArray: [HomeWork]! = workArray
             var madeChange = false
             for (index, work) in workArray.enumerated() {
                 if work.uid == id {
@@ -223,25 +223,25 @@ struct LocalActions {
         }
         
         struct All {
-            static func save(workArray: [Work]) {
+            static func save(workArray: [HomeWork]) {
                 for oneWork in workArray {
                     LocalActions.WorkObjects.save(newWork: oneWork)
                 }
             }
             
-            static func fetch() -> [Work] {
-                var attempt: [Work]! = []
+            static func fetch() -> [HomeWork] {
+                var attempt: [HomeWork]! = []
                 if Disk.exists("work.json", in: .caches) {
                     //Then there is a file to retrieve
                     do {
-                        attempt = try Disk.retrieve("work.json", from: .caches, as: [Work].self)
+                        attempt = try Disk.retrieve("work.json", from: .caches, as: [HomeWork].self)
                         
                     } catch {
-                        attempt = [Work("make an assignment", "HomeWorker", false, Date.init(), "randidthatdoesntmatter")]
+                        attempt = [HomeWork("make an assignment", "HomeWorker", false, Date.init(), "randidthatdoesntmatter")]
                     }
                 } else {
                     //Just add it to an empty array
-                    attempt.append(Work("make an assignment", "HomeWorker", false, Date.init(), "randidthatdoesntmatter"))
+                    attempt.append(HomeWork("make an assignment", "HomeWorker", false, Date.init(), "randidthatdoesntmatter"))
                 }
                 return attempt
                 

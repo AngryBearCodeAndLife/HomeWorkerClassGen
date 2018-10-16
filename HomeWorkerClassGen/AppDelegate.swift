@@ -26,11 +26,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         //#LoveSudoCode ***********************
         
-        let view = WorkView()
-        
-        window?.rootViewController = view
-        
-        window?.makeKeyAndVisible()
+        self.window = UIWindow(frame: UIScreen.main.bounds)
+        self.window?.rootViewController = WorkView()
+        self.window?.makeKeyAndVisible()
         
         return true
     }

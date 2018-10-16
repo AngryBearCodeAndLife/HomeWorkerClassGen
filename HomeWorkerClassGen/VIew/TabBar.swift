@@ -20,7 +20,7 @@ class TabBar: UIView {
     public var width: CGFloat!
     public var optionSet: [String] = []
     
-    override init(frame: CGRect, leftItem: Bool) {
+    init(frame: CGRect, leftItem: Bool) {
         super.init(frame: frame)
         
         self.backgroundColor = UIColor.retrieveMainColor(withAlpha: 1.0)

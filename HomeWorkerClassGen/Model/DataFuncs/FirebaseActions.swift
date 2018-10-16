@@ -99,7 +99,7 @@ struct FirebaseActions {
     
     struct WorkObjects {
         
-        static func save(_ newWork: Work) {
+        static func save(_ newWork: HomeWork) {
             print("RUNNING THE FUNCTION TO SAVE THE WORK TO THE CLOUD")
             let stringPath = "/work/"
             let databaseReference = Database.database().reference().child(stringPath).childByAutoId()
@@ -115,14 +115,14 @@ struct FirebaseActions {
             
             self.User.save(id: workKey)
             let endDateForLocal = WorkTools.turnToDate(dateString: newWork.endDateString)
-            let localWork = Work(newWork.assignmentName, newWork.assignee, newWork.wantsNotifications, endDateForLocal, workKey)
+            let localWork = HomeWork(newWork.assignmentName, newWork.assignee, newWork.wantsNotifications, endDateForLocal, workKey)
             LocalActions.WorkObjects.save(newWork: localWork)
         }
         
-        static func fetch(completion: @escaping ([Work]) -> Void) {
+        static func fetch(completion: @escaping ([HomeWork]) -> Void) {
             self.User.exists { (exists) in
                 if exists {
-                    var finalWork: [Work] = []
+                    var finalWork: [HomeWork] = []
                     //the work is there, lets go get it
                     self.User.fetch(completion: { (workIds) in
                         print("IS RUNNING THE FETCH FUNCITON IN ORDER TO GET THE ARRAY")
@@ -142,12 +142,12 @@ struct FirebaseActions {
                     })
                     
                 } else {
-                    completion([Work("You don't have any work in the cloud", "Me", false, Date.distantFuture, "randidthatdoesntmatter")])
+                    completion([HomeWork("You don't have any work in the cloud", "Me", false, Date.distantFuture, "randidthatdoesntmatter")])
                 }
             }
         }
         
-        private static func fetchOne(id: String, completion: @escaping (Work) -> Void) {
+        private static func fetchOne(id: String, completion: @escaping (HomeWork) -> Void) {
             
             let path = "work/\(String(describing: id))"
             let reference = Database.database().reference().child(path)
@@ -160,7 +160,7 @@ struct FirebaseActions {
                 let eDateS = snapshot.childSnapshot(forPath: "endDateString").value! as? String
                 let eDate = WorkTools.turnToDate(dateString: eDateS!)
                 //Create the work, and send it back using the completion thingy
-                var workFromCloud = Work(name!, assignee!, notifWant!, eDate, id)
+                var workFromCloud = HomeWork(name!, assignee!, notifWant!, eDate, id)
                 print(workFromCloud)
                 
                 self.Images.exists(workId: id, completion: { (exists) in

@@ -64,3 +64,58 @@ struct HomeWork: Codable {
         }
     }
 }
+
+struct WorkTools {
+    static func makeId() -> String {
+        
+        var canUse = false
+        var key: String!
+        
+        while canUse == false {
+            key = genkey()
+            
+            let currentWorks = LocalActions.WorkObjects.All.fetch()
+            
+            for work in currentWorks {
+                if work.uid != key {
+                    canUse = false
+                } else {
+                    canUse = true
+                }
+            }
+        }
+        
+        return key
+    }
+    
+    static func turnToDate(dateString: String) -> Date {
+        
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "MM/dd/yy"
+        dateFormatter.locale = Locale(identifier: "en_US_POSIX") // set locale to reliable US_POSIX
+        let date = dateFormatter.date(from: dateString)!
+        let calendar = Calendar.current
+        let components = calendar.dateComponents([.year, .month, .day], from: date)
+        let finalDate = calendar.date(from:components)
+        return finalDate!
+    }
+    
+    static func genkey() -> String {
+        let alpha = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"]
+        let randBool = [false, true]
+        var strungId: String = ""
+        
+        for _ in 0...16 {
+            if randBool[Int.random(in: 0 ..< 2)] {
+                //generate a random number to add
+                strungId = strungId + String(Int.random(in: 0 ..< 10))
+            } else {
+                //generate a random letter to add
+                strungId = strungId + alpha[Int.random(in: 0 ..< 25)]
+            }
+        }
+        
+        return strungId
+    }
+    
+}
