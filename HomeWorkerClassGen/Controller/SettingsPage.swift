@@ -59,9 +59,7 @@ class SettingsPage: UIViewController {
     }
     
     override func viewDidLoad() {
-        
-       
-        
+    
         moveView()
         
         //Show the color options

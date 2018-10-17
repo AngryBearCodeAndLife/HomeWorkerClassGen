@@ -27,7 +27,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         //#LoveSudoCode ***********************
         
         self.window = UIWindow(frame: UIScreen.main.bounds)
-        self.window?.rootViewController = SettingsPage()
+        self.window?.rootViewController = WorkView()
         self.window?.makeKeyAndVisible()
         
         return true

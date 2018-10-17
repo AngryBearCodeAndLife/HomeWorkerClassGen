@@ -12,7 +12,6 @@
 		C34AF4052161137D007DD25D /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C34AF4042161137D007DD25D /* ViewController.swift */; };
 		C34AF407216114F4007DD25D /* SettingsPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = C34AF406216114F4007DD25D /* SettingsPage.swift */; };
 		C34AF4092161350F007DD25D /* SlantedView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C34AF4082161350F007DD25D /* SlantedView.swift */; };
-		C34AF40B2161367B007DD25D /* Preferences.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C34AF40A2161367B007DD25D /* Preferences.storyboard */; };
 		C34AF40D21616A01007DD25D /* Button.swift in Sources */ = {isa = PBXBuildFile; fileRef = C34AF40C21616A01007DD25D /* Button.swift */; };
 		C35FF04A2170E85C004AE2AA /* AssignmentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C35FF0492170E85C004AE2AA /* AssignmentViewController.swift */; };
 		C3A20D9F2167B9250054440A /* Onboarding.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C3A20D9E2167B9250054440A /* Onboarding.storyboard */; };
@@ -41,7 +40,6 @@
 		C34AF4042161137D007DD25D /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
 		C34AF406216114F4007DD25D /* SettingsPage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsPage.swift; sourceTree = "<group>"; };
 		C34AF4082161350F007DD25D /* SlantedView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SlantedView.swift; sourceTree = "<group>"; };
-		C34AF40A2161367B007DD25D /* Preferences.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = Preferences.storyboard; sourceTree = "<group>"; };
 		C34AF40C21616A01007DD25D /* Button.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Button.swift; sourceTree = "<group>"; };
 		C35FF0492170E85C004AE2AA /* AssignmentViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AssignmentViewController.swift; sourceTree = "<group>"; };
 		C3A20D9E2167B9250054440A /* Onboarding.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = Onboarding.storyboard; sourceTree = "<group>"; };
@@ -135,7 +133,6 @@
 				C3A6333F215D9C1D004278E4 /* Main.storyboard */,
 				C3A63352215D9C9E004278E4 /* TabBar.swift */,
 				C34AF4082161350F007DD25D /* SlantedView.swift */,
-				C34AF40A2161367B007DD25D /* Preferences.storyboard */,
 				C34AF40C21616A01007DD25D /* Button.swift */,
 				C3A20D9E2167B9250054440A /* Onboarding.storyboard */,
 			);
@@ -265,7 +262,6 @@
 				C3A20D9F2167B9250054440A /* Onboarding.storyboard in Resources */,
 				C3A63343215D9C1E004278E4 /* Assets.xcassets in Resources */,
 				C3A63341215D9C1D004278E4 /* Main.storyboard in Resources */,
-				C34AF40B2161367B007DD25D /* Preferences.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

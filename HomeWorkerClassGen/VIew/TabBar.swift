@@ -15,10 +15,12 @@ class TabBar: UIView {
     
     var leftItem = UIButton()
     var newItemButton = UIButton()
-    var profileImage = UIImageView()
+    var profileImage = UIButton()
     
     public var width: CGFloat!
     public var optionSet: [String] = []
+    
+    var parentView: UIViewController!
     
     init(frame: CGRect, leftItem: Bool) {
         super.init(frame: frame)
@@ -32,11 +34,21 @@ class TabBar: UIView {
     }
     
     func setupProfileImage() {
-        profileImage.image = UIImage(named: "first")
+        
+        profileImage.setImage(UIImage(named: "first"), for: .normal)
+        profileImage.backgroundColor = UIColor.darkGray
         profileImage.frame = CGRect(x: self.frame.width - 80, y: 5, width: 70, height: 70)
         profileImage.layer.masksToBounds = true
         profileImage.layer.cornerRadius = 35
+        
+        profileImage.addTarget(self, action: #selector(showProfilePage), for: .touchUpInside)
+        
         self.addSubview(profileImage)
+    }
+    
+    @objc private func showProfilePage() {
+        print("Is thinking that the veiw was tapped")
+        parentView.present(SettingsPage(), animated: true, completion: nil)
     }
     
     func setupNewItem() {

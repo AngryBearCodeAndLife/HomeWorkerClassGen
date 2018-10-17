@@ -40,6 +40,7 @@ class WorkView: UIViewController, UITableViewDelegate, UITableViewDataSource {
         
         topBar = TabBar(frame: CGRect(x: 0, y: 0, width: self.view.frame.width, height: 80), leftItem: true)
         topBar.optionSet = ["New Assignment", "New Class"]
+        topBar.parentView = self
         self.view.addSubview(topBar)
     }
     
