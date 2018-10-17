@@ -9,9 +9,11 @@
 import Foundation
 import UIKit
 
-enum Colors {
+public enum Colors {
     case Green, Blue, Red, Purple, Yellow, Orange, Pink, Teal
 }
+
+extension Colors: CaseIterable {}
 
 extension UIColor {
     
@@ -28,11 +30,33 @@ extension UIColor {
     public static let mainColorArray = [mainGreen, mainBlue, mainRed, mainPurple, mainYellow, mainOrange, mainPink, mainTeal]
     
     public static func retrieveMainColor(withAlpha tint: CGFloat) -> UIColor {
-        guard let color = UserDefaults.standard.object(forKey: "mainColor") as? UIColor else { return mainGreen.withAlphaComponent(tint) }
+        guard let color = UserDefaults.standard.colorForKey(key: "mainColor") else { return mainGreen.withAlphaComponent(tint) }
         return color.withAlphaComponent(tint)
     }
     
-    static func setMainColor(_ colorCase: Colors) {
+    public static func getColor(_ colorCase: Colors) -> UIColor {
+        switch colorCase {
+            
+        case .Green:
+            return mainGreen
+        case .Blue:
+            return mainBlue
+        case .Red:
+            return mainRed
+        case .Purple:
+            return mainPurple
+        case .Yellow:
+            return mainYellow
+        case .Orange:
+            return mainOrange
+        case .Pink:
+            return mainPink
+        case .Teal:
+            return mainTeal
+        }
+    }
+    
+    public static func setMainColor(_ colorCase: Colors) {
         
         var newMainColor: UIColor!
         
@@ -56,7 +80,26 @@ extension UIColor {
             newMainColor = mainTeal
         }
         
-        UserDefaults.standard.set(newMainColor, forKey: "mainColor")
+        UserDefaults.standard.setColor(color: newMainColor, forKey: "mainColor")
+    }
+    
+}
+
+extension UserDefaults {
+    func colorForKey(key: String) -> UIColor? {
+        var color: UIColor?
+        if let colorData = data(forKey: key) {
+            color = NSKeyedUnarchiver.unarchiveObject(with: colorData) as? UIColor
+        }
+        return color
+    }
+    
+    func setColor(color: UIColor?, forKey key: String) {
+        var colorData: NSData?
+        if let color = color {
+            colorData = NSKeyedArchiver.archivedData(withRootObject: color) as NSData?
+        }
+        set(colorData, forKey: key)
     }
     
 }

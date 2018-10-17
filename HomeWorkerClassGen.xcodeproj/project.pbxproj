@@ -30,6 +30,8 @@
 		C3B7E3B1216D65ED0043AC43 /* FirebaseActions.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3B7E3B0216D65ED0043AC43 /* FirebaseActions.swift */; };
 		C3B7E3B3216D65F70043AC43 /* LocalActions.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3B7E3B2216D65F70043AC43 /* LocalActions.swift */; };
 		C3B7E3B5216D65FD0043AC43 /* AuthActions.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3B7E3B4216D65FD0043AC43 /* AuthActions.swift */; };
+		C3F0ECE02176ACFB00C0AC1B /* ColorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3F0ECDF2176ACFB00C0AC1B /* ColorView.swift */; };
+		C3F0ECE22176B11E00C0AC1B /* ColorTap.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3F0ECE12176B11E00C0AC1B /* ColorTap.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -59,6 +61,8 @@
 		C3B7E3B0216D65ED0043AC43 /* FirebaseActions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirebaseActions.swift; sourceTree = "<group>"; };
 		C3B7E3B2216D65F70043AC43 /* LocalActions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalActions.swift; sourceTree = "<group>"; };
 		C3B7E3B4216D65FD0043AC43 /* AuthActions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthActions.swift; sourceTree = "<group>"; };
+		C3F0ECDF2176ACFB00C0AC1B /* ColorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorView.swift; sourceTree = "<group>"; };
+		C3F0ECE12176B11E00C0AC1B /* ColorTap.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorTap.swift; sourceTree = "<group>"; };
 		CB525BE53E73D7BA2858878A /* Pods_HomeWorkerClassGen.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_HomeWorkerClassGen.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -164,6 +168,8 @@
 			isa = PBXGroup;
 			children = (
 				C3A63355215D9CD2004278E4 /* Colors.swift */,
+				C3F0ECDF2176ACFB00C0AC1B /* ColorView.swift */,
+				C3F0ECE12176B11E00C0AC1B /* ColorTap.swift */,
 			);
 			path = LocalExtensions;
 			sourceTree = "<group>";
@@ -329,10 +335,12 @@
 				C3A63353215D9C9E004278E4 /* TabBar.swift in Sources */,
 				C3A63356215D9CD2004278E4 /* Colors.swift in Sources */,
 				C3A6335C215DA0D5004278E4 /* InformationScreens.swift in Sources */,
+				C3F0ECE02176ACFB00C0AC1B /* ColorView.swift in Sources */,
 				C34AF4092161350F007DD25D /* SlantedView.swift in Sources */,
 				C34AF403216112E3007DD25D /* Onboarding.swift in Sources */,
 				C3B7E3AE216D00230043AC43 /* PhotoCell.swift in Sources */,
 				C3A63359215D9D24004278E4 /* HomeWorkCell.swift in Sources */,
+				C3F0ECE22176B11E00C0AC1B /* ColorTap.swift in Sources */,
 				C3A6333C215D9C1D004278E4 /* AppDelegate.swift in Sources */,
 				C35FF04A2170E85C004AE2AA /* AssignmentViewController.swift in Sources */,
 				C34AF4052161137D007DD25D /* ViewController.swift in Sources */,
