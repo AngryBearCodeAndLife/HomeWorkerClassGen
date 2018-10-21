@@ -22,6 +22,8 @@ class TabBar: UIView {
     
     var parentView: UIViewController!
     
+    var optionLabels: [UILabel] = []
+    
     init(frame: CGRect, leftItem: Bool) {
         super.init(frame: frame)
         
@@ -95,7 +97,7 @@ class TabBar: UIView {
     }
     
     @objc private func showNewWorkOptions() {
-        var optionLabels: [UILabel] = []
+        
         var newFrame = CGRect(x: self.frame.width / 2 - CGFloat(0.5) * width, y: 90, width: width, height: 50)
         
         for option in optionSet {
@@ -104,6 +106,8 @@ class TabBar: UIView {
             let newLabel = UILabel()
             newLabel.text = option
             newLabel.textColor = UIColor.retrieveMainColor(withAlpha: 1.0)
+            newLabel.font = UIFont.systemFont(ofSize: 22)
+            newLabel.textAlignment = .center
             newLabel.backgroundColor = UIColor.white.withAlphaComponent(0)
             newLabel.layer.borderWidth = 3
             newLabel.layer.borderColor = UIColor.retrieveMainColor(withAlpha: 1.0).cgColor
@@ -118,6 +122,7 @@ class TabBar: UIView {
             UIView.animate(withDuration: 0.6, delay: 0.0, usingSpringWithDamping: 0.7, initialSpringVelocity: 1.0, options: [], animations: {
                 label.frame = newFrame
                 label.layer.cornerRadius = 15
+                label.backgroundColor = UIColor.white
             }, completion: nil)
             newFrame = CGRect(x: newFrame.origin.x, y: newFrame.origin.y + 60, width: width, height: 50)
         }

@@ -40,6 +40,7 @@ class WorkView: UIViewController, UITableViewDelegate, UITableViewDataSource {
         
         topBar = TabBar(frame: CGRect(x: 0, y: 0, width: self.view.frame.width, height: 80), leftItem: true)
         topBar.optionSet = ["New Assignment", "New Class"]
+        topBar.width = 200
         topBar.parentView = self
         self.view.addSubview(topBar)
     }
@@ -74,7 +75,11 @@ class WorkView: UIViewController, UITableViewDelegate, UITableViewDataSource {
     //EVRYTHING TO DO WITH THE TABLE VIEW
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        self.present(AssignmentView(), animated: true, completion: nil)
+        print("Touched a cell!")
+        
+        let assignmentView = AssignmentView()
+        
+        self.present(assignmentView, animated: true, completion: nil)
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
