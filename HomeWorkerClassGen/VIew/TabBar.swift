@@ -53,7 +53,8 @@ class TabBar: UIView {
     
     func setupNewItem() {
         newItemButton.backgroundColor = UIColor.white
-        newItemButton.setImage(UIImage(named: "newItem"), for: .normal)
+        let colorString = "New" + UIColor.retrieveMainColorName()
+        newItemButton.setImage(UIImage(named: colorString), for: .normal)
         newItemButton.frame = CGRect(x: self.frame.width/2 - 35, y: 5, width: 70, height: 70)
         newItemButton.layer.cornerRadius = 35
         newItemButton.addTarget(self, action: #selector(showNewWorkOptions), for: .touchUpInside)
@@ -64,9 +65,11 @@ class TabBar: UIView {
         
         leftItem.backgroundColor = UIColor.white
         if communication {
-            leftItem.setImage(UIImage(named: "communicationImage"), for: .normal)
+            let colorString = "Communication" + UIColor.retrieveMainColorName()
+            leftItem.setImage(UIImage(named: colorString), for: .normal)
         } else {
-            leftItem.setImage(UIImage(named: "backImage"), for: .normal)
+            let colorString = "BackArrow" + UIColor.retrieveMainColorName()
+            leftItem.setImage(UIImage(named: colorString), for: .normal)
             leftItem.addTarget(self, action: #selector(showWorkPage), for: .touchUpInside)
         }
         leftItem.frame = CGRect(x: 10, y: 5, width: 70, height: 70)

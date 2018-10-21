@@ -34,6 +34,11 @@ extension UIColor {
         return color.withAlphaComponent(tint)
     }
     
+    public static func retrieveMainColorName() -> String {
+        guard let color = UserDefaults.standard.string(forKey: "mainColorName") else { return "Green" }
+        return color
+    }
+    
     public static func getColor(_ colorCase: Colors) -> UIColor {
         switch colorCase {
             
@@ -59,28 +64,38 @@ extension UIColor {
     public static func setMainColor(_ colorCase: Colors) {
         
         var newMainColor: UIColor!
+        var newMainColorName = ""
         
         switch colorCase {
             
         case .Green:
             newMainColor = mainGreen
+            newMainColorName = "Green"
         case .Blue:
             newMainColor = mainBlue
+            newMainColorName = "Blue"
         case .Red:
             newMainColor = mainRed
+            newMainColorName = "Red"
         case .Purple:
             newMainColor = mainPurple
+            newMainColorName = "Purple"
         case .Yellow:
             newMainColor = mainYellow
+            newMainColorName = "Yellow"
         case .Orange:
             newMainColor = mainOrange
+            newMainColorName = "Orange"
         case .Pink:
             newMainColor = mainPink
+            newMainColorName = "Pink"
         case .Teal:
             newMainColor = mainTeal
+            newMainColorName = "Teal"
         }
         
         UserDefaults.standard.setColor(color: newMainColor, forKey: "mainColor")
+        UserDefaults.standard.set(newMainColorName, forKey: "mainColorName")
     }
     
 }
