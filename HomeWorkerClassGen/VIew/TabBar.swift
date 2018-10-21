@@ -67,6 +67,7 @@ class TabBar: UIView {
             leftItem.setImage(UIImage(named: "communicationImage"), for: .normal)
         } else {
             leftItem.setImage(UIImage(named: "backImage"), for: .normal)
+            leftItem.addTarget(self, action: #selector(showWorkPage), for: .touchUpInside)
         }
         leftItem.frame = CGRect(x: 10, y: 5, width: 70, height: 70)
         leftItem.layer.cornerRadius = 35
@@ -84,6 +85,10 @@ class TabBar: UIView {
     
     @objc private func showCommunicationPage() {
         //Show the communication page, this function should somehow get the view controller that is sending it, so that we can return it, and we should have the view controller that is going to be presented in place of the actual communication page
+    }
+    
+    @objc private func showWorkPage() {
+        self.parentView.present(WorkView(), animated: true, completion: nil)
     }
     
     @objc private func showNewWorkOptions() {

@@ -73,6 +73,10 @@ class WorkView: UIViewController, UITableViewDelegate, UITableViewDataSource {
     
     //EVRYTHING TO DO WITH THE TABLE VIEW
     
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        self.present(AssignmentView(), animated: true, completion: nil)
+    }
+    
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return work.count + 1
         //The work array is normally going to be empty. This would give it a count of 0. When we add one, it is going to be the one cell that will take up all of the room on the board, and say that you have no work. Else, it will be the one on the bottom

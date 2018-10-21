@@ -31,6 +31,7 @@
 		C3B7E3B5216D65FD0043AC43 /* AuthActions.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3B7E3B4216D65FD0043AC43 /* AuthActions.swift */; };
 		C3F0ECE02176ACFB00C0AC1B /* ColorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3F0ECDF2176ACFB00C0AC1B /* ColorView.swift */; };
 		C3F0ECE22176B11E00C0AC1B /* ColorTap.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3F0ECE12176B11E00C0AC1B /* ColorTap.swift */; };
+		C3F0ECE4217BE0EF00C0AC1B /* CollectionViewCells.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3F0ECE3217BE0EF00C0AC1B /* CollectionViewCells.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -61,6 +62,7 @@
 		C3B7E3B4216D65FD0043AC43 /* AuthActions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthActions.swift; sourceTree = "<group>"; };
 		C3F0ECDF2176ACFB00C0AC1B /* ColorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorView.swift; sourceTree = "<group>"; };
 		C3F0ECE12176B11E00C0AC1B /* ColorTap.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorTap.swift; sourceTree = "<group>"; };
+		C3F0ECE3217BE0EF00C0AC1B /* CollectionViewCells.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionViewCells.swift; sourceTree = "<group>"; };
 		CB525BE53E73D7BA2858878A /* Pods_HomeWorkerClassGen.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_HomeWorkerClassGen.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -135,6 +137,7 @@
 				C34AF4082161350F007DD25D /* SlantedView.swift */,
 				C34AF40C21616A01007DD25D /* Button.swift */,
 				C3A20D9E2167B9250054440A /* Onboarding.storyboard */,
+				C3F0ECE3217BE0EF00C0AC1B /* CollectionViewCells.swift */,
 			);
 			path = VIew;
 			sourceTree = "<group>";
@@ -335,6 +338,7 @@
 				C34AF4092161350F007DD25D /* SlantedView.swift in Sources */,
 				C34AF403216112E3007DD25D /* Onboarding.swift in Sources */,
 				C3B7E3AE216D00230043AC43 /* PhotoCell.swift in Sources */,
+				C3F0ECE4217BE0EF00C0AC1B /* CollectionViewCells.swift in Sources */,
 				C3A63359215D9D24004278E4 /* HomeWorkCell.swift in Sources */,
 				C3F0ECE22176B11E00C0AC1B /* ColorTap.swift in Sources */,
 				C3A6333C215D9C1D004278E4 /* AppDelegate.swift in Sources */,
