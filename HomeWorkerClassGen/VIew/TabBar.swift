@@ -24,6 +24,8 @@ class TabBar: UIView {
     
     var optionLabels: [UILabel] = []
     
+    var isShowingOptions = false
+    
     init(frame: CGRect, leftItem: Bool) {
         super.init(frame: frame)
         
@@ -33,6 +35,17 @@ class TabBar: UIView {
         setupNewItem()
         setupProfileImage()
         
+    }
+    
+    public func retrieveOptionFrames() -> [CGRect] {
+        
+        var frames: [CGRect] = []
+        
+        for label in optionLabels {
+            frames.append(label.frame)
+        }
+        
+        return frames
     }
     
     func setupProfileImage() {
@@ -96,6 +109,26 @@ class TabBar: UIView {
         self.parentView.present(WorkView(), animated: true, completion: nil)
     }
     
+    public func hideOptions() {
+        
+        for label in optionLabels {
+            UIView.animate(withDuration: 0.6, delay: 0.0, usingSpringWithDamping: 0.7, initialSpringVelocity: 1.0, options: [], animations: {
+                
+                label.frame = self.newItemButton.frame
+                label.layer.cornerRadius = 35
+                label.alpha = 0.0
+                self.frame = CGRect(x: 0, y: 0, width: self.frame.width, height: 80)
+                
+            }) { _ in
+                label.removeFromSuperview()
+            }
+        }
+    
+        //After all of this is done, and they arr no longer visible, set the options to false.
+        isShowingOptions = false
+        
+    }
+    
     @objc private func showNewWorkOptions() {
         
         var newFrame = CGRect(x: self.frame.width / 2 - CGFloat(0.5) * width, y: 90, width: width, height: 50)
@@ -120,10 +153,16 @@ class TabBar: UIView {
             self.addSubview(label)
             //Animate to the correct frame
             UIView.animate(withDuration: 0.6, delay: 0.0, usingSpringWithDamping: 0.7, initialSpringVelocity: 1.0, options: [], animations: {
+                self.frame = CGRect(x: self.frame.origin.x, y: self.frame.origin.y, width: self.frame.width, height: 300)
                 label.frame = newFrame
                 label.layer.cornerRadius = 15
-                label.backgroundColor = UIColor.white
+//                label.backgroundColor = UIColor.white
+                //
+                label.textColor = UIColor.white
+                label.layer.borderColor = UIColor.white.cgColor
+                label.backgroundColor = UIColor.retrieveMainColor(withAlpha: 1.0)
             }, completion: nil)
+            isShowingOptions = true
             newFrame = CGRect(x: newFrame.origin.x, y: newFrame.origin.y + 60, width: width, height: 50)
         }
     }

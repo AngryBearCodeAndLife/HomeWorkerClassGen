@@ -118,4 +118,19 @@ class WorkView: UIViewController, UITableViewDelegate, UITableViewDataSource {
         }
     }
     
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        
+        for touch in touches {
+            
+            if topBar.isShowingOptions {
+                for label in topBar.optionLabels {
+                    if label.frame.contains(touch.location(in: self.topBar)) {
+                        //Eventually this is going to become a function that will tell which index was hit, and then the tab bar would be able to run the function that should be called
+                        //Look at how I can pass a function as a variable. Though would I need this?
+                        topBar.hideOptions()
+                    }
+                }
+            }
+        }
+    }
 }
