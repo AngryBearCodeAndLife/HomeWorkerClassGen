@@ -26,6 +26,8 @@ class TabBar: UIView {
     
     var isShowingOptions = false
     
+    var canShowNewOptions = true
+    
     init(frame: CGRect, leftItem: Bool) {
         super.init(frame: frame)
         
@@ -62,7 +64,6 @@ class TabBar: UIView {
     }
     
     @objc private func showProfilePage() {
-        print("Is thinking that the veiw was tapped")
         parentView.present(SettingsPage(), animated: true, completion: nil)
     }
     
@@ -109,6 +110,33 @@ class TabBar: UIView {
         self.parentView.present(WorkView(), animated: true, completion: nil)
     }
     
+    public func optionFunction(_ location: CGPoint) {
+        
+        //Now that you can no longer oevrride what is already going on, it is safe to do whatever we wanted to do.
+        
+        for label in optionLabels {
+            if label.frame.contains(location) {
+                //An option was tapped. Let's figure out which one it was.
+                print("Option was tapped")
+                if label.text == "New Assignment" {
+                    print("We are going to create a new assignment")
+                    createAssignment()
+                } else if label.text == "New Class" {
+                    print("We are going to create a new class")
+                }
+            }
+         }
+        
+        hideOptions()
+        
+    }
+    
+    private func createAssignment() {
+        let newObjectView = NewObjectViewController()
+        newObjectView.modalPresentationStyle = .overCurrentContext
+        parentView.present(newObjectView, animated: true, completion: nil)
+    }
+    
     public func hideOptions() {
         
         for label in optionLabels {
@@ -131,39 +159,45 @@ class TabBar: UIView {
     
     @objc private func showNewWorkOptions() {
         
-        var newFrame = CGRect(x: self.frame.width / 2 - CGFloat(0.5) * width, y: 90, width: width, height: 50)
-        
-        for option in optionSet {
-            //Create a label which has a frame equal to the new view frame
+        if isShowingOptions == false {
+            optionLabels.removeAll()
+            var newFrame = CGRect(x: self.frame.width / 2 - CGFloat(0.5) * width, y: 90, width: width, height: 50)
             
-            let newLabel = UILabel()
-            newLabel.text = option
-            newLabel.textColor = UIColor.retrieveMainColor(withAlpha: 1.0)
-            newLabel.font = UIFont.systemFont(ofSize: 22)
-            newLabel.textAlignment = .center
-            newLabel.backgroundColor = UIColor.white.withAlphaComponent(0)
-            newLabel.layer.borderWidth = 3
-            newLabel.layer.borderColor = UIColor.retrieveMainColor(withAlpha: 1.0).cgColor
-            newLabel.frame = newItemButton.frame
-            newLabel.layer.cornerRadius = 35
-            optionLabels.append(newLabel)
-        }
-        
-        for label in optionLabels {
-            self.addSubview(label)
-            //Animate to the correct frame
-            UIView.animate(withDuration: 0.6, delay: 0.0, usingSpringWithDamping: 0.7, initialSpringVelocity: 1.0, options: [], animations: {
-                self.frame = CGRect(x: self.frame.origin.x, y: self.frame.origin.y, width: self.frame.width, height: 300)
-                label.frame = newFrame
-                label.layer.cornerRadius = 15
-//                label.backgroundColor = UIColor.white
-                //
-                label.textColor = UIColor.white
-                label.layer.borderColor = UIColor.white.cgColor
-                label.backgroundColor = UIColor.retrieveMainColor(withAlpha: 1.0)
-            }, completion: nil)
-            isShowingOptions = true
-            newFrame = CGRect(x: newFrame.origin.x, y: newFrame.origin.y + 60, width: width, height: 50)
+            for option in optionSet {
+                //Create a label which has a frame equal to the new view frame
+                
+                let newLabel = UILabel()
+                newLabel.text = option
+                newLabel.textColor = UIColor.retrieveMainColor(withAlpha: 1.0)
+                newLabel.font = UIFont.systemFont(ofSize: 22)
+                newLabel.textAlignment = .center
+                newLabel.backgroundColor = UIColor.white.withAlphaComponent(0)
+                newLabel.layer.borderWidth = 3
+                newLabel.layer.borderColor = UIColor.retrieveMainColor(withAlpha: 1.0).cgColor
+                newLabel.frame = newItemButton.frame
+                newLabel.layer.cornerRadius = 35
+                optionLabels.append(newLabel)
+            }
+            
+            let newHeight: CGFloat = CGFloat(90 + (60 * optionSet.count))
+            
+            for label in optionLabels {
+                self.addSubview(label)
+                
+                //Animate to the correct frame
+                UIView.animate(withDuration: 0.5, delay: 0.0, usingSpringWithDamping: 0.7, initialSpringVelocity: 1.0, options: [], animations: {
+                    self.frame = CGRect(x: self.frame.origin.x, y: self.frame.origin.y, width: self.frame.width, height: newHeight)
+                    label.frame = newFrame
+                    label.layer.cornerRadius = 15
+                    //                label.backgroundColor = UIColor.white
+                    //
+                    label.textColor = UIColor.white
+                    label.layer.borderColor = UIColor.white.cgColor
+                    label.backgroundColor = UIColor.retrieveMainColor(withAlpha: 1.0)
+                }, completion: nil)
+                isShowingOptions = true
+                newFrame = CGRect(x: newFrame.origin.x, y: newFrame.origin.y + 60, width: width, height: 50)
+            }
         }
     }
 }

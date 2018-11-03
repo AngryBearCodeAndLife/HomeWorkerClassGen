@@ -75,8 +75,6 @@ class HomeWorkCell: UITableViewCell {
     
     @objc private func showWorkPage() {
         
-        print("tapped on a cell")
-        
         parentViewController.present(destinationViewController, animated: true) {
             //THIS IS GOING TO HAVE TO CHNAGE TO BE CHANGING INTO THE SHOULD RELOAD VARIABLE TO BE ON
             //CANT DO THIS WITHOUT HAVING TO CREATE THAT CUSTOM VIEW CONTROLLER RIGHT NOW

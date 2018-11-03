@@ -28,12 +28,10 @@ class WorkView: UIViewController, UITableViewDelegate, UITableViewDataSource {
     
     override func viewDidLoad() {
         
-        print("Did make it to the work view")
         self.view.backgroundColor = UIColor.white
         
         placeTableView()
         readyBar()
-        print(self.view.frame)
     }
     
     func readyBar() {
@@ -75,7 +73,6 @@ class WorkView: UIViewController, UITableViewDelegate, UITableViewDataSource {
     //EVRYTHING TO DO WITH THE TABLE VIEW
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        print("Touched a cell!")
         
         let assignmentView = AssignmentView()
         
@@ -123,13 +120,7 @@ class WorkView: UIViewController, UITableViewDelegate, UITableViewDataSource {
         for touch in touches {
             
             if topBar.isShowingOptions {
-                for label in topBar.optionLabels {
-                    if label.frame.contains(touch.location(in: self.topBar)) {
-                        //Eventually this is going to become a function that will tell which index was hit, and then the tab bar would be able to run the function that should be called
-                        //Look at how I can pass a function as a variable. Though would I need this?
-                        topBar.hideOptions()
-                    }
-                }
+                topBar.optionFunction(touch.location(in: self.view))
             }
         }
     }
