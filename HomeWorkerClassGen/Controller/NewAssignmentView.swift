@@ -9,7 +9,7 @@
 import Foundation
 import UIKit
 
-class NewObjectViewController: UIViewController {
+class NewAssignmentViewController: NewOptionViewController {
     
     let assignmentNameField = UITextField()
     
@@ -100,7 +100,7 @@ class NewObjectViewController: UIViewController {
         showNextOption()
     }
     
-    func showNextOption() {
+    override func showNextOption() {
         
         //If there is a new option, show the next one, and hide the last one.
         if currentDisplayOption == -1 {
@@ -172,6 +172,8 @@ class NewObjectViewController: UIViewController {
                     //We have all of the information(except for notifications) about how to make the new assignment.
                     let newAssignment = HomeWork(self.newName, self.newClass, true, self.newDueDate, "isdybiwusdioyrbfd")
                     
+                    LocalActions.WorkObjects.save(newWork: newAssignment)
+                    
                     self.present(WorkView(), animated: true, completion: nil)
                 }
             } else {
@@ -195,7 +197,7 @@ class NewObjectViewController: UIViewController {
     }
 }
 
-extension NewObjectViewController: UIPickerViewDelegate, UIPickerViewDataSource {
+extension NewAssignmentViewController: UIPickerViewDelegate, UIPickerViewDataSource {
     func numberOfComponents(in pickerView: UIPickerView) -> Int {
         return 1
     }

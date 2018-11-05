@@ -123,6 +123,7 @@ class TabBar: UIView {
                     createAssignment()
                 } else if label.text == "New Class" {
                     print("We are going to create a new class")
+                    createClass()
                 }
             }
          }
@@ -132,9 +133,15 @@ class TabBar: UIView {
     }
     
     private func createAssignment() {
-        let newObjectView = NewObjectViewController()
+        let newObjectView = NewAssignmentViewController()
         newObjectView.modalPresentationStyle = .overCurrentContext
         parentView.present(newObjectView, animated: true, completion: nil)
+    }
+    
+    private func createClass() {
+        let newClassView = NewClassViewController()
+        newClassView.modalPresentationStyle = .overCurrentContext
+        parentView.present(newClassView, animated: true, completion: nil)
     }
     
     public func hideOptions() {

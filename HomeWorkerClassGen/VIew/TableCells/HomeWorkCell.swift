@@ -46,6 +46,7 @@ class HomeWorkCell: UITableViewCell {
         //Assignment label
         assignmentNameLabel.font = UIFont.systemFont(ofSize: 20)
         assignmentNameLabel.textAlignment = .left
+        assignmentNameLabel.isUserInteractionEnabled = true
         assignmentNameLabel.frame = CGRect(x: 12, y: 6, width: 180, height: 30)
         self.addSubview(assignmentNameLabel)
         
@@ -53,6 +54,7 @@ class HomeWorkCell: UITableViewCell {
         classLabel.font = UIFont.systemFont(ofSize: 20)
         classLabel.textColor = UIColor(red: 139/255, green: 139/255, blue: 139/255, alpha: 1.0)
         classLabel.textAlignment = .left
+        classLabel.isUserInteractionEnabled = true
         classLabel.frame = CGRect(x: 12, y: 42, width: 180, height: 30)
         self.addSubview(classLabel)
         
@@ -60,12 +62,14 @@ class HomeWorkCell: UITableViewCell {
         dueDateLabel.font = UIFont.systemFont(ofSize: 20)
         dueDateLabel.textColor = UIColor(red: 139/255, green: 139/255, blue: 139/255, alpha: 1.0)
         dueDateLabel.textAlignment = .right
+        dueDateLabel.isUserInteractionEnabled = true
         dueDateLabel.frame = CGRect(x: width - 170, y: 6, width: 164, height: 30)
         self.addSubview(dueDateLabel)
         
         //Time left label
         timeLeftLabel.font = UIFont.systemFont(ofSize: 20)
         timeLeftLabel.textAlignment = .right
+        timeLeftLabel.isUserInteractionEnabled = true
         timeLeftLabel.frame = CGRect(x: width - 206, y: 42, width: 200, height: 30)
         self.addSubview(timeLeftLabel)
         

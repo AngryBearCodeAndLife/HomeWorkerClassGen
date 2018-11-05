@@ -20,7 +20,7 @@ class NewOptionSubView: UIView {
     var topLabel: UILabel!
     var bottomButton: RoundedButtons!
     
-    var parentViewController: NewObjectViewController!
+    var parentViewController: NewOptionViewController!
     
     func figureHeight() -> CGFloat {
         

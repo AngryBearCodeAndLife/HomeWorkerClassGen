@@ -18,7 +18,9 @@ class WorkView: UIViewController, UITableViewDelegate, UITableViewDataSource {
         return true
     }
     
-    var work: [HomeWork] = [HomeWork("Packer", "Laich", false, Date.distantFuture, "wufoewubw"), HomeWork("Reading", "Cousins", false, Date.distantFuture, "wufoewubw"), HomeWork("Chapter", "Blair", false, Date.distantFuture, "wufoewubw"), HomeWork("Origami", "Haven", false, Date.distantFuture, "wufoewubw"), HomeWork("To Kill A Mockingbird", "Chamoff", false, Date.distantFuture, "wufoewubw"), HomeWork("Diagram", "Tanquay", false, Date.distantFuture, "wufoewubw")]
+//    var work: [HomeWork] = [HomeWork("Packer", "Laich", false, Date.distantFuture, "wufoewubw"), HomeWork("Reading", "Cousins", false, Date.distantFuture, "wufoewubw"), HomeWork("Chapter", "Blair", false, Date.distantFuture, "wufoewubw"), HomeWork("Origami", "Haven", false, Date.distantFuture, "wufoewubw"), HomeWork("To Kill A Mockingbird", "Chamoff", false, Date.distantFuture, "wufoewubw"), HomeWork("Diagram", "Tanquay", false, Date.distantFuture, "wufoewubw")]
+    
+    var work: [HomeWork] = []
     
     var table = UITableView()
     
@@ -29,6 +31,8 @@ class WorkView: UIViewController, UITableViewDelegate, UITableViewDataSource {
     override func viewDidLoad() {
         
         self.view.backgroundColor = UIColor.white
+        
+        work = LocalActions.WorkObjects.All.fetch()
         
         placeTableView()
         readyBar()

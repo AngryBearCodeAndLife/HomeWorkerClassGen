@@ -14,8 +14,10 @@
 		C34AF4092161350F007DD25D /* SlantedView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C34AF4082161350F007DD25D /* SlantedView.swift */; };
 		C34AF40D21616A01007DD25D /* Button.swift in Sources */ = {isa = PBXBuildFile; fileRef = C34AF40C21616A01007DD25D /* Button.swift */; };
 		C35FF04A2170E85C004AE2AA /* AssignmentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C35FF0492170E85C004AE2AA /* AssignmentViewController.swift */; };
+		C372663F218E42370011BBEF /* NewClassViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C372663E218E42370011BBEF /* NewClassViewController.swift */; };
 		C376B03E2187AB7B00D4C1A7 /* UIViewControllerExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = C376B03D2187AB7B00D4C1A7 /* UIViewControllerExtension.swift */; };
-		C399AC4621812D1600527F2B /* NewObjectView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C399AC4521812D1600527F2B /* NewObjectView.swift */; };
+		C37C3482218F3FC000FBBB87 /* NewOption.swift in Sources */ = {isa = PBXBuildFile; fileRef = C37C3481218F3FC000FBBB87 /* NewOption.swift */; };
+		C399AC4621812D1600527F2B /* NewAssignmentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C399AC4521812D1600527F2B /* NewAssignmentView.swift */; };
 		C3A20D9F2167B9250054440A /* Onboarding.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C3A20D9E2167B9250054440A /* Onboarding.storyboard */; };
 		C3A6333C215D9C1D004278E4 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3A6333B215D9C1D004278E4 /* AppDelegate.swift */; };
 		C3A63341215D9C1D004278E4 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C3A6333F215D9C1D004278E4 /* Main.storyboard */; };
@@ -46,8 +48,10 @@
 		C34AF4082161350F007DD25D /* SlantedView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SlantedView.swift; sourceTree = "<group>"; };
 		C34AF40C21616A01007DD25D /* Button.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Button.swift; sourceTree = "<group>"; };
 		C35FF0492170E85C004AE2AA /* AssignmentViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AssignmentViewController.swift; sourceTree = "<group>"; };
+		C372663E218E42370011BBEF /* NewClassViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewClassViewController.swift; sourceTree = "<group>"; };
 		C376B03D2187AB7B00D4C1A7 /* UIViewControllerExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIViewControllerExtension.swift; sourceTree = "<group>"; };
-		C399AC4521812D1600527F2B /* NewObjectView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewObjectView.swift; sourceTree = "<group>"; };
+		C37C3481218F3FC000FBBB87 /* NewOption.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewOption.swift; sourceTree = "<group>"; };
+		C399AC4521812D1600527F2B /* NewAssignmentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewAssignmentView.swift; sourceTree = "<group>"; };
 		C3A20D9E2167B9250054440A /* Onboarding.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = Onboarding.storyboard; sourceTree = "<group>"; };
 		C3A63338215D9C1D004278E4 /* HomeWorkerClassGen.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = HomeWorkerClassGen.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C3A6333B215D9C1D004278E4 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -155,6 +159,7 @@
 				C3B7E3AF216D65DA0043AC43 /* DataFuncs */,
 				C3A63350215D9C71004278E4 /* HomeWork.swift */,
 				C34AF402216112E3007DD25D /* Onboarding.swift */,
+				C37C3481218F3FC000FBBB87 /* NewOption.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -167,7 +172,8 @@
 				C34AF406216114F4007DD25D /* SettingsPage.swift */,
 				C3B7E3AB216C12BC0043AC43 /* WorkTableAndBar.swift */,
 				C35FF0492170E85C004AE2AA /* AssignmentViewController.swift */,
-				C399AC4521812D1600527F2B /* NewObjectView.swift */,
+				C399AC4521812D1600527F2B /* NewAssignmentView.swift */,
+				C372663E218E42370011BBEF /* NewClassViewController.swift */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -343,6 +349,7 @@
 				C34AF407216114F4007DD25D /* SettingsPage.swift in Sources */,
 				C3A63353215D9C9E004278E4 /* TabBar.swift in Sources */,
 				C3A63356215D9CD2004278E4 /* Colors.swift in Sources */,
+				C37C3482218F3FC000FBBB87 /* NewOption.swift in Sources */,
 				C3A6335C215DA0D5004278E4 /* InformationScreens.swift in Sources */,
 				C376B03E2187AB7B00D4C1A7 /* UIViewControllerExtension.swift in Sources */,
 				C3F0ECE02176ACFB00C0AC1B /* ColorView.swift in Sources */,
@@ -354,11 +361,12 @@
 				C3F0ECE22176B11E00C0AC1B /* ColorTap.swift in Sources */,
 				C3A6333C215D9C1D004278E4 /* AppDelegate.swift in Sources */,
 				C35FF04A2170E85C004AE2AA /* AssignmentViewController.swift in Sources */,
-				C399AC4621812D1600527F2B /* NewObjectView.swift in Sources */,
+				C399AC4621812D1600527F2B /* NewAssignmentView.swift in Sources */,
 				C34AF4052161137D007DD25D /* ViewController.swift in Sources */,
 				C3A63351215D9C71004278E4 /* HomeWork.swift in Sources */,
 				C34AF40D21616A01007DD25D /* Button.swift in Sources */,
 				C3B7E3AC216C12BC0043AC43 /* WorkTableAndBar.swift in Sources */,
+				C372663F218E42370011BBEF /* NewClassViewController.swift in Sources */,
 				C3B7E3B5216D65FD0043AC43 /* AuthActions.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
