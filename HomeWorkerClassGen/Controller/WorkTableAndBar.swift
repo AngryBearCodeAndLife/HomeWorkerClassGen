@@ -78,9 +78,11 @@ class WorkView: UIViewController, UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
-        let assignmentView = AssignmentView()
-        
-        self.present(assignmentView, animated: true, completion: nil)
+        if indexPath.row != self.work.count {
+            let assignmentView = AssignmentView()
+            
+            self.present(assignmentView, animated: true, completion: nil)
+        }
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -117,6 +119,29 @@ class WorkView: UIViewController, UITableViewDelegate, UITableViewDataSource {
             }
             return cell
         }
+    }
+    
+    func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath) -> [UITableViewRowAction]? {
+        
+        if indexPath.row != self.work.count {
+            let delete = UITableViewRowAction(style: .destructive, title: "Delete") { (action, indexPath) in
+                // delete item at indexPath
+                
+                LocalActions.WorkObjects.delete(id: self.work[indexPath.row].uid)
+                self.work.remove(at: indexPath.row)
+                tableView.deleteRows(at: [indexPath], with: .fade)
+                
+                //Eventually, this should show a little drop down message from the tab bar with an undo button for a few seconds
+                
+            }
+            
+            return [delete]
+        } else {
+            return []
+        }
+        
+        
+        
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {

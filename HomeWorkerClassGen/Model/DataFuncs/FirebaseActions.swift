@@ -113,9 +113,9 @@ struct FirebaseActions {
             lastDatabaseRef.child("notifications").setValue(newWork.wantsNotifications)
             lastDatabaseRef.child("startDateString").setValue(newWork.startDateString)
             
-            self.User.save(id: workKey)
+            self.User.save(id: workKey!)
             let endDateForLocal = WorkTools.turnToDate(dateString: newWork.endDateString)
-            let localWork = HomeWork(newWork.assignmentName, newWork.assignee, newWork.wantsNotifications, endDateForLocal, workKey)
+            let localWork = HomeWork(newWork.assignmentName, newWork.assignee, newWork.wantsNotifications, endDateForLocal, workKey!)
             LocalActions.WorkObjects.save(newWork: localWork)
         }
         
