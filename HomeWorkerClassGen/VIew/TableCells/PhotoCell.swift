@@ -16,6 +16,8 @@ class PhotoCell: UITableViewCell {
             setPhotoAndTitle()
         }
     }
+    public var viewWidth: CGFloat!
+    public var viewHeight: CGFloat!
     
     var photo = UIImageView()
     var title = UILabel()
@@ -29,31 +31,45 @@ class PhotoCell: UITableViewCell {
     func setPhotoAndTitle() {
         
         //Give the basic things
-        if hasOtherWork == true {
-            //We need to show the photo that says to get things done
-            photo.image = workToGoPictures.randomElement()!
-            photo.layer.cornerRadius = 15
-            self.addSubview(photo)
-            photo.frame = CGRect(x: 40, y: 60, width: self.frame.width - 80, height: self.frame.height - 150)
-            
-            title.text = workToGoSlogans.randomElement()
-            title.textAlignment = .center
-            title.textColor = UIColor.retrieveMainColor(withAlpha: 1.0)
-            title.frame = CGRect(x: 0, y: 100 + self.photo.frame.height, width: self.frame.width, height: 30)
-            self.addSubview(title)
-        } else {
-            //We need to show the photo that says to get things done
-            photo.image = workDonePictures.randomElement()!
-            photo.layer.cornerRadius = 15
-            self.addSubview(photo)
-            photo.frame = CGRect(x: 40, y: 60, width: self.frame.width - 80, height: self.frame.height - 150)
-            
-            title.text = workDoneSlogans.randomElement()
-            title.textAlignment = .center
-            title.textColor = UIColor.retrieveMainColor(withAlpha: 1.0)
-            title.frame = CGRect(x: 0, y: 100 + self.photo.frame.height, width: self.frame.width, height: 30)
-            self.addSubview(title)
-        }
+//        if hasOtherWork == true {
+//            //We need to show the photo that says to get things done
+//            photo.image = workToGoPictures.randomElement()!
+//            photo.layer.cornerRadius = 15
+//            self.addSubview(photo)
+//            photo.frame = CGRect(x: 40, y: 60, width: self.frame.width - 80, height: self.frame.height - 150)
+//
+//            title.text = workToGoSlogans.randomElement()
+//            title.textAlignment = .center
+//            title.textColor = UIColor.retrieveMainColor(withAlpha: 1.0)
+//            title.frame = CGRect(x: 0, y: 100 + self.photo.frame.height, width: self.frame.width, height: 30)
+//            self.addSubview(title)
+//        } else {
+//            //We need to show the photo that says to get things done
+//            photo.image = workDonePictures.randomElement()!
+//            photo.layer.cornerRadius = 15
+//            self.addSubview(photo)
+//            photo.frame = CGRect(x: 40, y: 60, width: self.frame.width - 80, height: self.frame.height - 150)
+//
+//            title.text = workDoneSlogans.randomElement()
+//            title.textAlignment = .center
+//            title.textColor = UIColor.retrieveMainColor(withAlpha: 1.0)
+//            title.frame = CGRect(x: 0, y: 100 + self.photo.frame.height, width: self.frame.width, height: 30)
+//            self.addSubview(title)
+//        }
+
+        
+        photo.image = workToGoPictures.randomElement()!
+        photo.layer.cornerRadius = 15
+        photo.backgroundColor = UIColor.gray
+        photo.frame = CGRect(x: 40, y: 60, width: viewWidth - 80, height: viewHeight - 150)
+        self.addSubview(photo)
+        
+        title.text = workToGoSlogans.randomElement()
+        title.textAlignment = .center
+        title.textColor = UIColor.retrieveMainColor(withAlpha: 1.0)
+        title.font = UIFont.boldSystemFont(ofSize: 24)
+        title.frame = CGRect(x: 0, y: 100 + photo.frame.height, width: viewWidth, height: 30)
+        self.addSubview(title)
         
     }
     

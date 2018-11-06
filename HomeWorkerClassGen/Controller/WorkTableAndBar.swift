@@ -110,6 +110,8 @@ class WorkView: UIViewController, UITableViewDelegate, UITableViewDataSource {
             return cell
         } else {
             let cell = table.dequeueReusableCell(withIdentifier: "finishThat") as! PhotoCell
+            cell.viewWidth = self.view.frame.width
+            cell.viewHeight = self.view.frame.height - 80
             if work.count > 0 {
                 //There was some work
                 cell.hasOtherWork = true

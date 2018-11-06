@@ -239,10 +239,8 @@ struct LocalActions {
                     } catch {
                         attempt = [HomeWork("make an assignment", "HomeWorker", false, Date.init(), "randidthatdoesntmatter")]
                     }
-                } else {
-                    //Just add it to an empty array
-                    attempt.append(HomeWork("make an assignment", "HomeWorker", false, Date.init(), "randidthatdoesntmatter"))
                 }
+                
                 return attempt
                 
             }

@@ -34,13 +34,6 @@ class HomeWorkCell: UITableViewCell {
     //The gesture recognizer that will tell me if it is selected
     let tap = UITapGestureRecognizer(target: self, action: #selector(showWorkPage))
     
-    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
-        super.init(style: style, reuseIdentifier: reuseIdentifier)
-        
-        print("making a cell")
-        
-    }
-    
     private func positionEverything() {
         //change the styling and frames of all of these labels
         //Assignment label
@@ -84,6 +77,13 @@ class HomeWorkCell: UITableViewCell {
             //CANT DO THIS WITHOUT HAVING TO CREATE THAT CUSTOM VIEW CONTROLLER RIGHT NOW
             self.parentViewController.view.translatesAutoresizingMaskIntoConstraints = true
         }
+        
+    }
+    
+    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
+        super.init(style: style, reuseIdentifier: reuseIdentifier)
+        
+        print("Making a cell")
         
     }
     
