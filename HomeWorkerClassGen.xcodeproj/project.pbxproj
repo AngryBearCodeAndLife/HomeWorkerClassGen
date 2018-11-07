@@ -13,6 +13,7 @@
 		C34AF407216114F4007DD25D /* SettingsPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = C34AF406216114F4007DD25D /* SettingsPage.swift */; };
 		C34AF4092161350F007DD25D /* SlantedView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C34AF4082161350F007DD25D /* SlantedView.swift */; };
 		C34AF40D21616A01007DD25D /* Button.swift in Sources */ = {isa = PBXBuildFile; fileRef = C34AF40C21616A01007DD25D /* Button.swift */; };
+		C359F0EF219257CF002F4FB9 /* SignInController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C359F0EE219257CF002F4FB9 /* SignInController.swift */; };
 		C35FF04A2170E85C004AE2AA /* AssignmentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C35FF0492170E85C004AE2AA /* AssignmentViewController.swift */; };
 		C372663F218E42370011BBEF /* NewClassViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C372663E218E42370011BBEF /* NewClassViewController.swift */; };
 		C376B03E2187AB7B00D4C1A7 /* UIViewControllerExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = C376B03D2187AB7B00D4C1A7 /* UIViewControllerExtension.swift */; };
@@ -47,6 +48,7 @@
 		C34AF406216114F4007DD25D /* SettingsPage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsPage.swift; sourceTree = "<group>"; };
 		C34AF4082161350F007DD25D /* SlantedView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SlantedView.swift; sourceTree = "<group>"; };
 		C34AF40C21616A01007DD25D /* Button.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Button.swift; sourceTree = "<group>"; };
+		C359F0EE219257CF002F4FB9 /* SignInController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignInController.swift; sourceTree = "<group>"; };
 		C35FF0492170E85C004AE2AA /* AssignmentViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AssignmentViewController.swift; sourceTree = "<group>"; };
 		C372663E218E42370011BBEF /* NewClassViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewClassViewController.swift; sourceTree = "<group>"; };
 		C376B03D2187AB7B00D4C1A7 /* UIViewControllerExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIViewControllerExtension.swift; sourceTree = "<group>"; };
@@ -174,6 +176,7 @@
 				C35FF0492170E85C004AE2AA /* AssignmentViewController.swift */,
 				C399AC4521812D1600527F2B /* NewAssignmentView.swift */,
 				C372663E218E42370011BBEF /* NewClassViewController.swift */,
+				C359F0EE219257CF002F4FB9 /* SignInController.swift */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -346,6 +349,7 @@
 				C3B7E3B3216D65F70043AC43 /* LocalActions.swift in Sources */,
 				C3EBEEFB2186777D00B7F901 /* NewOptionSubView.swift in Sources */,
 				C3B7E3B1216D65ED0043AC43 /* FirebaseActions.swift in Sources */,
+				C359F0EF219257CF002F4FB9 /* SignInController.swift in Sources */,
 				C34AF407216114F4007DD25D /* SettingsPage.swift in Sources */,
 				C3A63353215D9C9E004278E4 /* TabBar.swift in Sources */,
 				C3A63356215D9CD2004278E4 /* Colors.swift in Sources */,
