@@ -52,7 +52,7 @@ class TabBar: UIView {
     
     func setupProfileImage() {
         
-        profileImage.setImage(UIImage(named: "first"), for: .normal)
+        profileImage.setImage(LocalActions.ProfileImage.fetch(), for: .normal)
         profileImage.backgroundColor = UIColor.darkGray
         profileImage.frame = CGRect(x: self.frame.width - 80, y: 5, width: 70, height: 70)
         profileImage.layer.masksToBounds = true

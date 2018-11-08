@@ -7,12 +7,18 @@
 //
 
 import UIKit
+import Firebase
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
 
+    func goToView(_ destination: UIViewController) {
+        self.window = UIWindow(frame: UIScreen.main.bounds)
+        self.window?.rootViewController = destination
+        self.window?.makeKeyAndVisible()
+    }
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
@@ -26,9 +32,34 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         //#LoveSudoCode ***********************
         
-        self.window = UIWindow(frame: UIScreen.main.bounds)
-        self.window?.rootViewController = SignUpController()
-        self.window?.makeKeyAndVisible()
+        FirebaseApp.configure()
+        
+        let canBeSignedIn: Bool = LocalActions.AutoLoggin.isEnabled()
+        
+        if canBeSignedIn {
+            let password = LocalActions.AutoLoggin.password()
+            let email =  LocalActions.AutoLoggin.username()
+            Auth.auth().signIn(withEmail: email, password: password, completion: { (user, error) in
+                if error == nil && user?.user.uid != nil {
+                    //User is signed in
+                    FirebaseActions.ProfileImage.fetch()
+                    FirebaseActions.Name.fetch()
+                    
+                    FirebaseActions.WorkObjects.fetch { (workArray) in
+                        print("THIS IS THE ARRAY OF WORK THAT I SHOULD HAVE GOTTEN")
+                        print(workArray)
+                    }
+                    
+                    self.goToView(WorkView())
+                    
+                } else {
+                    //User could not be signed in, go to the sign in view
+                    self.goToView(SignInController())
+                }
+            })
+        } else {
+            self.goToView(SignInController())
+        }
         
         return true
     }

@@ -60,13 +60,15 @@ struct FirebaseActions {
             storageRef.getData(maxSize: 1 * 10240 * 10240) { data, error in
                 if error != nil {
                     // Uh-oh, an error occurred!
-                    profileImage = UIImage(named: "first")
+                    LocalActions.ProfileImage.save(image: UIImage(named: "NewOrange")!)
+//                    profileImage =
                     // Mark: Do something if it doesn;t returun the image like we wanted
                 } else {
                     // Data for my image is returned
-                    profileImage = UIImage(data: data!)
+                    LocalActions.ProfileImage.save(image: UIImage(data: data!)!)
+//                    profileImage = UIImage(data: data!)
                 }
-                LocalActions.ProfileImage.save(image: profileImage!)
+                
             }
         }
     }

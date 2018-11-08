@@ -25,8 +25,15 @@ struct AuthActions {
                 print("There is a problem, eventually do something to tell the other view contrller that it needs to tell the user why it just crashed")
             } else {
                 FirebaseActions.Name.save(name: name)
+                LocalActions.Name.save(name: name)
                 FirebaseActions.ProfileImage.save(profilePhoto: profileImage)
+                LocalActions.ProfileImage.save(image: profileImage)
             }
+            
+            LocalActions.AutoLoggin.enable(email: email, password: password, completion: { worked in
+                print("Setup auto login", worked)
+            })
+            
         })
         return !problem
     }
