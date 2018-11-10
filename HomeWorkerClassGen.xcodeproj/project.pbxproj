@@ -9,7 +9,6 @@
 /* Begin PBXBuildFile section */
 		80189CEAA370433C4A021F7C /* Pods_HomeWorkerClassGen.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CB525BE53E73D7BA2858878A /* Pods_HomeWorkerClassGen.framework */; };
 		C34AF403216112E3007DD25D /* Onboarding.swift in Sources */ = {isa = PBXBuildFile; fileRef = C34AF402216112E3007DD25D /* Onboarding.swift */; };
-		C34AF4052161137D007DD25D /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C34AF4042161137D007DD25D /* ViewController.swift */; };
 		C34AF407216114F4007DD25D /* SettingsPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = C34AF406216114F4007DD25D /* SettingsPage.swift */; };
 		C34AF4092161350F007DD25D /* SlantedView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C34AF4082161350F007DD25D /* SlantedView.swift */; };
 		C34AF40D21616A01007DD25D /* Button.swift in Sources */ = {isa = PBXBuildFile; fileRef = C34AF40C21616A01007DD25D /* Button.swift */; };
@@ -46,13 +45,13 @@
 		05947C263C5A272C4E005408 /* Pods-HomeWorkerClassGen.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-HomeWorkerClassGen.debug.xcconfig"; path = "Pods/Target Support Files/Pods-HomeWorkerClassGen/Pods-HomeWorkerClassGen.debug.xcconfig"; sourceTree = "<group>"; };
 		4B3A662EBDB0EB71139319B4 /* Pods-HomeWorkerClassGen.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-HomeWorkerClassGen.release.xcconfig"; path = "Pods/Target Support Files/Pods-HomeWorkerClassGen/Pods-HomeWorkerClassGen.release.xcconfig"; sourceTree = "<group>"; };
 		C34AF402216112E3007DD25D /* Onboarding.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Onboarding.swift; sourceTree = "<group>"; };
-		C34AF4042161137D007DD25D /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
 		C34AF406216114F4007DD25D /* SettingsPage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsPage.swift; sourceTree = "<group>"; };
 		C34AF4082161350F007DD25D /* SlantedView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SlantedView.swift; sourceTree = "<group>"; };
 		C34AF40C21616A01007DD25D /* Button.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Button.swift; sourceTree = "<group>"; };
 		C359F0EE219257CF002F4FB9 /* SignUpController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpController.swift; sourceTree = "<group>"; };
 		C359F0F02193698F002F4FB9 /* SignInController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignInController.swift; sourceTree = "<group>"; };
 		C359F0F22193B717002F4FB9 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		C359F0F821976FD8002F4FB9 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		C35FF0492170E85C004AE2AA /* AssignmentViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AssignmentViewController.swift; sourceTree = "<group>"; };
 		C372663E218E42370011BBEF /* NewClassViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewClassViewController.swift; sourceTree = "<group>"; };
 		C376B03D2187AB7B00D4C1A7 /* UIViewControllerExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIViewControllerExtension.swift; sourceTree = "<group>"; };
@@ -111,9 +110,28 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+		C359F0F42197698D002F4FB9 /* AuthenticationController */ = {
+			isa = PBXGroup;
+			children = (
+				C359F0EE219257CF002F4FB9 /* SignUpController.swift */,
+				C359F0F02193698F002F4FB9 /* SignInController.swift */,
+			);
+			path = AuthenticationController;
+			sourceTree = "<group>";
+		};
+		C359F0F5219769AB002F4FB9 /* ObjectCreation */ = {
+			isa = PBXGroup;
+			children = (
+				C399AC4521812D1600527F2B /* NewAssignmentView.swift */,
+				C372663E218E42370011BBEF /* NewClassViewController.swift */,
+			);
+			path = ObjectCreation;
+			sourceTree = "<group>";
+		};
 		C3A6332F215D9C1D004278E4 = {
 			isa = PBXGroup;
 			children = (
+				C359F0F821976FD8002F4FB9 /* README.md */,
 				C3A6333A215D9C1D004278E4 /* HomeWorkerClassGen */,
 				C3A63339215D9C1D004278E4 /* Products */,
 				8F1363A8A8B8891049C67F4F /* Pods */,
@@ -174,15 +192,12 @@
 		C3A6334F215D9C4F004278E4 /* Controller */ = {
 			isa = PBXGroup;
 			children = (
+				C359F0F5219769AB002F4FB9 /* ObjectCreation */,
+				C359F0F42197698D002F4FB9 /* AuthenticationController */,
 				C3A6335A215DA0BE004278E4 /* Onboarding */,
-				C34AF4042161137D007DD25D /* ViewController.swift */,
 				C34AF406216114F4007DD25D /* SettingsPage.swift */,
 				C3B7E3AB216C12BC0043AC43 /* WorkTableAndBar.swift */,
 				C35FF0492170E85C004AE2AA /* AssignmentViewController.swift */,
-				C399AC4521812D1600527F2B /* NewAssignmentView.swift */,
-				C372663E218E42370011BBEF /* NewClassViewController.swift */,
-				C359F0EE219257CF002F4FB9 /* SignUpController.swift */,
-				C359F0F02193698F002F4FB9 /* SignInController.swift */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -374,7 +389,6 @@
 				C3A6333C215D9C1D004278E4 /* AppDelegate.swift in Sources */,
 				C35FF04A2170E85C004AE2AA /* AssignmentViewController.swift in Sources */,
 				C399AC4621812D1600527F2B /* NewAssignmentView.swift in Sources */,
-				C34AF4052161137D007DD25D /* ViewController.swift in Sources */,
 				C3A63351215D9C71004278E4 /* HomeWork.swift in Sources */,
 				C34AF40D21616A01007DD25D /* Button.swift in Sources */,
 				C3B7E3AC216C12BC0043AC43 /* WorkTableAndBar.swift in Sources */,

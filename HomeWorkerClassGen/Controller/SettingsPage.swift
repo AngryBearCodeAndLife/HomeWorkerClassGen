@@ -30,7 +30,7 @@ class SettingsPage: UIViewController {
     func moveView() {
         slantedViewBack.backgroundColor = UIColor.white
         slantedViewBack.frame = CGRect(x: 0, y: 0, width: self.view.frame.width, height: 128)
-        nameLabel.text = "Name"
+        nameLabel.text = LocalActions.Name.fetch()
         nameLabel.textColor = UIColor.retrieveMainColor(withAlpha: 1.0)
         nameLabel.font = UIFont.systemFont(ofSize: 38)
         nameLabel.frame = CGRect(x: 0, y: 40, width: self.view.frame.width, height: 45)
@@ -50,8 +50,10 @@ class SettingsPage: UIViewController {
         self.view.backgroundColor = UIColor.retrieveMainColor(withAlpha: 1.0)
         
         profilePictureView.backgroundColor = UIColor.gray
+        profilePictureView.image = LocalActions.ProfileImage.fetch()
         profilePictureView.frame = CGRect(x: self.view.frame.width * 0.5 - (self.view.frame.width * 0.3), y: slantedViewBack.frame.height + 20, width: self.view.frame.width * 0.6, height: self.view.frame.width * 0.6)
         profilePictureView.layer.cornerRadius = profilePictureView.frame.width / 2
+        profilePictureView.layer.masksToBounds = true
         
         self.view.addSubview(profilePictureView)
         
@@ -86,6 +88,16 @@ class SettingsPage: UIViewController {
         changeEmailButton.titleLabel?.font = UIFont.systemFont(ofSize: 20)
         self.view.addSubview(changeEmailButton)
         
+        signOutButton.setTitle("SIGN OUT", for: .normal)
+        signOutButton.setTitleColor(UIColor.red, for: .normal)
+        signOutButton.borderColor = UIColor.red
+        signOutButton.borderRadius = 10
+        signOutButton.lineWidth = 2
+        signOutButton.frame = CGRect(x: (self.view.frame.width/2) - 107.5, y: (self.changeEmailButton.frame.origin.y + self.changeEmailButton.frame.height) + 6, width: 215, height: 50)
+        signOutButton.titleLabel?.font = UIFont.boldSystemFont(ofSize: 30)
+        signOutButton.addTarget(self, action: #selector(signOut), for: .touchUpInside)
+        self.view.addSubview(signOutButton)
+        
         //Color buttons
         let colors = UIColor.mainColorArray
         
@@ -113,6 +125,13 @@ class SettingsPage: UIViewController {
             currentColor += 1
             print(currentColor)
             
+        }
+    }
+    
+    @objc private func signOut() {
+        
+        if AuthActions.userSigningOut() {
+            self.present(SignInController(), animated: true, completion: nil)
         }
     }
     

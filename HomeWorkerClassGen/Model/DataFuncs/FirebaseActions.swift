@@ -106,7 +106,7 @@ struct FirebaseActions {
             let stringPath = "/work/"
             let databaseReference = Database.database().reference().child(stringPath).childByAutoId()
             let workKey = databaseReference.key
-            let finalPath = "/work/\(String(describing: workKey))"
+            let finalPath = "/work/\(String(describing: workKey!))"
             let lastDatabaseRef = Database.database().reference().child(finalPath)
             
             lastDatabaseRef.child("assignee").setValue(newWork.assignee)
@@ -144,7 +144,7 @@ struct FirebaseActions {
                     })
                     
                 } else {
-                    completion([HomeWork("You don't have any work in the cloud", "Me", false, Date.distantFuture, "randidthatdoesntmatter")])
+                    completion([])
                 }
             }
         }

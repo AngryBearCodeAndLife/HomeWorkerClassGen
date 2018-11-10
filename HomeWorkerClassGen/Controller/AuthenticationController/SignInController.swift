@@ -60,9 +60,15 @@ class SignInController: UIViewController {
                     //User is signed in
                     AuthActions.setUser()
                     
+                    LocalActions.AutoLoggin.enable(email: self.emailField.text!, password: self.passwordField.text!, completion: { (finished) in
+                        print("Autologgin was enabled", finished)
+                    })
+                    
                     LocalActions.AutoLoggin.enable(email: self.emailField.text!, password: self.passwordField.text!, completion: { _ in
                         print("Atologin was enabled after signing the in")
                     })
+                    
+                    print(user?.user.email)
                     
                     self.present(WorkView(), animated: true, completion: nil)
                     

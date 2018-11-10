@@ -67,6 +67,10 @@ class SignUpController: UIViewController {
                 
                 print("user was made!")
                 
+                LocalActions.AutoLoggin.enable(email: emailField.text!, password: passwordField.text!) { finished in
+                    print("Signing up set autologgin", finished)
+                }
+                
                 self.present(WorkView(), animated: true, completion: nil)
                 
             } else {

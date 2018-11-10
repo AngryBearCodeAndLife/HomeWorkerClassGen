@@ -143,9 +143,16 @@ struct LocalActions {
         }
         
         static func enable(email: String, password: String, completion: (Bool) -> Void) {
+            
+            if self.isEnabled() {
+                self.disable { _ in
+                    print("disabled to reenable")
+                }
+            }
+            
             UserDefaults.standard.set(true, forKey: "hasAutoSignIn")
-            let psaveSuccessful: Bool = KeychainWrapper.standard.set(email, forKey: "userPassword")
-            let eSaveSuccessful: Bool = KeychainWrapper.standard.set(password, forKey: "userEmail")
+            let eSaveSuccessful: Bool = KeychainWrapper.standard.set(email, forKey: "userEmail")
+            let psaveSuccessful: Bool = KeychainWrapper.standard.set(password, forKey: "userPassword")
             if psaveSuccessful && eSaveSuccessful {
                 completion(true)
             } else {

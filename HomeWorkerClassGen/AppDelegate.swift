@@ -34,11 +34,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         FirebaseApp.configure()
         
-        let canBeSignedIn: Bool = LocalActions.AutoLoggin.isEnabled()
-        
-        if canBeSignedIn {
+        if LocalActions.AutoLoggin.isEnabled() {
             let password = LocalActions.AutoLoggin.password()
             let email =  LocalActions.AutoLoggin.username()
+            print("email", email)
+            print("Passwird", password.lowercased())
             Auth.auth().signIn(withEmail: email, password: password, completion: { (user, error) in
                 if error == nil && user?.user.uid != nil {
                     //User is signed in
@@ -54,6 +54,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                     
                 } else {
                     //User could not be signed in, go to the sign in view
+                    print("This is the error of signing in", error)
                     self.goToView(SignInController())
                 }
             })
@@ -84,6 +85,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func applicationWillTerminate(_ application: UIApplication) {
         // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
+        
+        AuthActions.removeUser()
     }
 
 
