@@ -172,10 +172,9 @@ class NewAssignmentViewController: NewOptionViewController {
                     //We have all of the information(except for notifications) about how to make the new assignment.
                     let newAssignment = HomeWork(self.newName, self.newClass, true, self.newDueDate, "isdybiwusdioyrbfd")
                     
-                    FirebaseActions.WorkObjects.save(newAssignment)
-                    
-                    
-                    self.present(WorkView(), animated: true, completion: nil)
+                    DataStorage.WorkObjects.save(newAssignment, completion: {
+                        self.present(WorkView(), animated: true, completion: nil)
+                    })
                 }
             } else {
                 optionSubviews[currentDisplayOption].shake(count: 3, for: 0.2, withTranslation: 10)

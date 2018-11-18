@@ -63,20 +63,10 @@ class SignUpController: UIViewController {
             
             //Sign in
             
-            if AuthActions.createUser(name: nameField.text!, email: emailField.text!, password: passwordField.text!, profileImage: UIImage(named: "NewOrange")!) {
-                
-                print("user was made!")
-                
-                LocalActions.AutoLoggin.enable(email: emailField.text!, password: passwordField.text!) { finished in
-                    print("Signing up set autologgin", finished)
+            AuthActions.createNewUser(name: nameField.text!, email: emailField.text!, password: passwordField.text!, profileImage: UIImage(named: "NewOrange")!) { success in
+                if success {
+                    self.present(WorkView(), animated: true, completion: nil)
                 }
-                
-                self.present(WorkView(), animated: true, completion: nil)
-                
-            } else {
-            
-                print("User could not be made")
-            
             }
             
         }

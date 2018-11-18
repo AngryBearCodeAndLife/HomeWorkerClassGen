@@ -28,9 +28,15 @@ class SettingsPage: UIViewController {
     let signOutButton = RoundedButtons()
     
     func moveView() {
+        
+        DataStorage.User.Name.fetch { (success, name) in
+            if success {
+                self.nameLabel.text = name
+            }
+        }
+        
         slantedViewBack.backgroundColor = UIColor.white
         slantedViewBack.frame = CGRect(x: 0, y: 0, width: self.view.frame.width, height: 128)
-        nameLabel.text = LocalActions.Name.fetch()
         nameLabel.textColor = UIColor.retrieveMainColor(withAlpha: 1.0)
         nameLabel.font = UIFont.systemFont(ofSize: 38)
         nameLabel.frame = CGRect(x: 0, y: 40, width: self.view.frame.width, height: 45)
@@ -49,8 +55,11 @@ class SettingsPage: UIViewController {
         
         self.view.backgroundColor = UIColor.retrieveMainColor(withAlpha: 1.0)
         
+        DataStorage.User.ProfileImage.fetch { profile in
+            self.profilePictureView.image = profile
+        }
+        
         profilePictureView.backgroundColor = UIColor.gray
-        profilePictureView.image = LocalActions.ProfileImage.fetch()
         profilePictureView.frame = CGRect(x: self.view.frame.width * 0.5 - (self.view.frame.width * 0.3), y: slantedViewBack.frame.height + 20, width: self.view.frame.width * 0.6, height: self.view.frame.width * 0.6)
         profilePictureView.layer.cornerRadius = profilePictureView.frame.width / 2
         profilePictureView.layer.masksToBounds = true
@@ -130,9 +139,8 @@ class SettingsPage: UIViewController {
     
     @objc private func signOut() {
         
-        if AuthActions.userSigningOut() {
-            self.present(SignInController(), animated: true, completion: nil)
-        }
+        AuthActions.signOut()
+        self.present(SignInController(), animated: true, completion: nil)
     }
     
     //107.5 less then the middle

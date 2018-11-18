@@ -32,10 +32,13 @@ class WorkView: UIViewController, UITableViewDelegate, UITableViewDataSource {
         
         self.view.backgroundColor = UIColor.white
         
-        work = LocalActions.WorkObjects.All.fetch()
+        DataStorage.WorkObjects.fetch(completion: { homework in
+            self.work = homework
+            
+            self.placeTableView()
+            self.readyBar()
+        })
         
-        placeTableView()
-        readyBar()
     }
     
     func readyBar() {
@@ -129,10 +132,10 @@ class WorkView: UIViewController, UITableViewDelegate, UITableViewDataSource {
             let delete = UITableViewRowAction(style: .destructive, title: "Delete") { (action, indexPath) in
                 // delete item at indexPath
                 
-                LocalActions.WorkObjects.delete(id: self.work[indexPath.row].uid)
-                self.work.remove(at: indexPath.row)
-                tableView.deleteRows(at: [indexPath], with: .fade)
-                
+                DataStorage.WorkObjects.delete(self.work[indexPath.row].uid, completion: {
+                    self.work.remove(at: indexPath.row)
+                    tableView.deleteRows(at: [indexPath], with: .fade)
+                })
                 //Eventually, this should show a little drop down message from the tab bar with an undo button for a few seconds
                 
             }

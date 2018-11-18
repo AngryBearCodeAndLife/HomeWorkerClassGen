@@ -66,27 +66,6 @@ struct HomeWork: Codable {
 }
 
 struct WorkTools {
-    static func makeId() -> String {
-        
-        var canUse = false
-        var key: String!
-        
-        while canUse == false {
-            key = genkey()
-            
-            let currentWorks = LocalActions.WorkObjects.All.fetch()
-            
-            for work in currentWorks {
-                if work.uid != key {
-                    canUse = false
-                } else {
-                    canUse = true
-                }
-            }
-        }
-        
-        return key
-    }
     
     static func turnToDate(dateString: String) -> Date {
         

@@ -52,15 +52,17 @@ class TabBar: UIView {
     
     func setupProfileImage() {
         
-        profileImage.setImage(LocalActions.ProfileImage.fetch(), for: .normal)
-        profileImage.backgroundColor = UIColor.darkGray
-        profileImage.frame = CGRect(x: self.frame.width - 80, y: 5, width: 70, height: 70)
-        profileImage.layer.masksToBounds = true
-        profileImage.layer.cornerRadius = 35
-        
-        profileImage.addTarget(self, action: #selector(showProfilePage), for: .touchUpInside)
-        
-        self.addSubview(profileImage)
+        DataStorage.User.ProfileImage.fetch { picture in
+            self.profileImage.setImage(picture, for: .normal)
+            self.profileImage.backgroundColor = UIColor.darkGray
+            self.profileImage.frame = CGRect(x: self.frame.width - 80, y: 5, width: 70, height: 70)
+            self.profileImage.layer.masksToBounds = true
+            self.profileImage.layer.cornerRadius = 35
+            
+            self.profileImage.addTarget(self, action: #selector(self.showProfilePage), for: .touchUpInside)
+            
+            self.addSubview(self.profileImage)
+        }
     }
     
     @objc private func showProfilePage() {

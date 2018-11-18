@@ -9,68 +9,106 @@
 import Foundation
 import UIKit
 import FirebaseAuth
-import SwiftKeychainWrapper
+import FirebaseDatabase
 
 struct AuthActions {
-    //
-    //    static func turnToJPEG(image: UIImage) ->  {
-    //        return image.jpegData(compressionQuality: 0.75)
-    //    }
     
-    static func createUser(name: String, email: String, password: String, profileImage: UIImage) -> Bool {
-        var problem = false
-        Auth.auth().createUser(withEmail: email, password: password, completion: { (authResult, error) in
-            if error != nil {
-                problem = true
-                print("There is a problem, eventually do something to tell the other view contrller that it needs to tell the user why it just crashed")
+    static func closeApp() {
+        try? Auth.auth().signOut()
+    }
+    
+    static func createNewUser(name: String, email: String, password: String, profileImage: UIImage, completion: @escaping (Bool) -> Void) {
+        
+        Auth.auth().createUser(withEmail: email, password: password) { (authResult, error) in
+            
+            if error == nil && authResult != nil {
+                
+                DataStorage.AutoLoggin.enable(email: email, password: password)
+                
+                DataStorage.User.Name.save(name, completion: { success in
+                    if success {
+                        DataStorage.User.ProfileImage.save(profileImage, completion: { success in
+                            if success {
+                                completion(true)
+                            } else {
+                                completion(false)
+                            }
+                        })
+                    } else {
+                        completion(false)
+                    }
+                })
             } else {
-                FirebaseActions.Name.save(name: name)
-                LocalActions.Name.save(name: name)
-                FirebaseActions.ProfileImage.save(profilePhoto: profileImage)
-                LocalActions.ProfileImage.save(image: profileImage)
+                completion(false)
             }
             
-            LocalActions.AutoLoggin.enable(email: email, password: password, completion: { worked in
-                print("Setup auto login", worked)
-            })
-            
-        })
-        return !problem
-    }
-    
-    static func setUser() {
-        
-        //This will be called when a user is created, or when they log in. This is also called by the app delegate if it needs to autolog them in
-        
-        FirebaseActions.ProfileImage.fetch()
-        FirebaseActions.Name.fetch()
-        FirebaseActions.WorkObjects.fetch { (workArray) in
-            LocalActions.WorkObjects.All.save(workArray: workArray)
         }
         
     }
     
-    static func removeUser() {
+    static func openApp(completion: @escaping (Bool) -> Void) {
         
-        LocalActions.WorkImages.All.delete()
-        LocalActions.WorkObjects.All.delete()
-        LocalActions.ProfileImage.delete()
-        LocalActions.Name.delete()
+        Auth.auth().signIn(withEmail: DataStorage.AutoLoggin.email(), password: DataStorage.AutoLoggin.password()) { (authResult, error) in
+            if error == nil && authResult != nil {
+                
+                if let myUID = Auth.auth().currentUser?.uid {
+                    let changePath = "users/\(myUID)/updated"
+                    let changeRef = Database.database().reference().child(changePath)
+                    changeRef.observeSingleEvent(of: .value, with: { snapshot in
+                        
+                        let wasChanged = snapshot.value! as? Bool
+                        
+                        if wasChanged! {
+                            DataStorage.WorkObjects.fetch(completion: { _ in
+                                changeRef.setValue(false)
+                                completion(true)
+                            })
+                        } else {
+                            completion(true)
+                        }
+                        
+                    })
+                }
+                
+            } else {
+                completion(false)
+            }
+        }
         
     }
     
-    static func userSigningOut() -> Bool {
-        var success = true
-        LocalActions.ProfileImage.delete()
-        LocalActions.WorkImages.All.delete()
-        LocalActions.WorkObjects.All.delete()
-        LocalActions.Name.delete()
-        UserDefaults.standard.set(false, forKey: "hasAutoSignIn")
-        let pRemove = KeychainWrapper.standard.removeObject(forKey: "userPassword")
-        let eRemove = KeychainWrapper.standard.removeObject(forKey: "userEmail")
-        if !eRemove || !pRemove {
-            success = false
+    static func setNewUser(email: String, password: String, completion: @escaping (Bool) -> Void) {
+        
+        //This is going to be called when the user is signing in from the sign in page, the auto loggin didnt work, or they are opening for first time, etc....
+        Auth.auth().signIn(withEmail: email, password: password) { (authResult, error) in
+            if authResult != nil && error == nil {
+                DataStorage.AutoLoggin.enable(email: email, password: password, completion: {})
+                DataStorage.User.Name.fetch(completion: { (found, name) in
+                    if found == true && name != "" {
+                        DataStorage.WorkObjects.fetch(completion: { _ in
+                            completion(true)
+                        })
+                    } else {
+                        completion(false)
+                    }
+                })
+            } else {
+                completion(false)
+            }
         }
-        return success
+        
     }
+    
+    static func signOut() {
+        //This is a purposeful signout. The user hit the signout button in the preferences page
+        
+        try? Auth.auth().signOut()
+        
+        DataStorage.WorkObjects.Local.delete()
+        DataStorage.User.Name.delete()
+        DataStorage.User.ProfileImage.delete()
+        DataStorage.AutoLoggin.disable()
+        
+    }
+    
 }

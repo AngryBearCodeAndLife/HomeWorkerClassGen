@@ -15,6 +15,7 @@
 		C359F0EF219257CF002F4FB9 /* SignUpController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C359F0EE219257CF002F4FB9 /* SignUpController.swift */; };
 		C359F0F12193698F002F4FB9 /* SignInController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C359F0F02193698F002F4FB9 /* SignInController.swift */; };
 		C359F0F32193B717002F4FB9 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = C359F0F22193B717002F4FB9 /* GoogleService-Info.plist */; };
+		C35E56AA219F0F370088113F /* Storage.swift in Sources */ = {isa = PBXBuildFile; fileRef = C35E56A9219F0F370088113F /* Storage.swift */; };
 		C35FF04A2170E85C004AE2AA /* AssignmentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C35FF0492170E85C004AE2AA /* AssignmentViewController.swift */; };
 		C372663F218E42370011BBEF /* NewClassViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C372663E218E42370011BBEF /* NewClassViewController.swift */; };
 		C376B03E2187AB7B00D4C1A7 /* UIViewControllerExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = C376B03D2187AB7B00D4C1A7 /* UIViewControllerExtension.swift */; };
@@ -32,8 +33,6 @@
 		C3A6335C215DA0D5004278E4 /* InformationScreens.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3A6335B215DA0D5004278E4 /* InformationScreens.swift */; };
 		C3B7E3AC216C12BC0043AC43 /* WorkTableAndBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3B7E3AB216C12BC0043AC43 /* WorkTableAndBar.swift */; };
 		C3B7E3AE216D00230043AC43 /* PhotoCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3B7E3AD216D00230043AC43 /* PhotoCell.swift */; };
-		C3B7E3B1216D65ED0043AC43 /* FirebaseActions.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3B7E3B0216D65ED0043AC43 /* FirebaseActions.swift */; };
-		C3B7E3B3216D65F70043AC43 /* LocalActions.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3B7E3B2216D65F70043AC43 /* LocalActions.swift */; };
 		C3B7E3B5216D65FD0043AC43 /* AuthActions.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3B7E3B4216D65FD0043AC43 /* AuthActions.swift */; };
 		C3EBEEFB2186777D00B7F901 /* NewOptionSubView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3EBEEFA2186777D00B7F901 /* NewOptionSubView.swift */; };
 		C3F0ECE02176ACFB00C0AC1B /* ColorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3F0ECDF2176ACFB00C0AC1B /* ColorView.swift */; };
@@ -52,6 +51,7 @@
 		C359F0F02193698F002F4FB9 /* SignInController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignInController.swift; sourceTree = "<group>"; };
 		C359F0F22193B717002F4FB9 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		C359F0F821976FD8002F4FB9 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
+		C35E56A9219F0F370088113F /* Storage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Storage.swift; sourceTree = "<group>"; };
 		C35FF0492170E85C004AE2AA /* AssignmentViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AssignmentViewController.swift; sourceTree = "<group>"; };
 		C372663E218E42370011BBEF /* NewClassViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewClassViewController.swift; sourceTree = "<group>"; };
 		C376B03D2187AB7B00D4C1A7 /* UIViewControllerExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIViewControllerExtension.swift; sourceTree = "<group>"; };
@@ -71,8 +71,6 @@
 		C3A6335B215DA0D5004278E4 /* InformationScreens.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InformationScreens.swift; sourceTree = "<group>"; };
 		C3B7E3AB216C12BC0043AC43 /* WorkTableAndBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkTableAndBar.swift; sourceTree = "<group>"; };
 		C3B7E3AD216D00230043AC43 /* PhotoCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoCell.swift; sourceTree = "<group>"; };
-		C3B7E3B0216D65ED0043AC43 /* FirebaseActions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirebaseActions.swift; sourceTree = "<group>"; };
-		C3B7E3B2216D65F70043AC43 /* LocalActions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalActions.swift; sourceTree = "<group>"; };
 		C3B7E3B4216D65FD0043AC43 /* AuthActions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthActions.swift; sourceTree = "<group>"; };
 		C3EBEEFA2186777D00B7F901 /* NewOptionSubView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewOptionSubView.swift; sourceTree = "<group>"; };
 		C3F0ECDF2176ACFB00C0AC1B /* ColorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorView.swift; sourceTree = "<group>"; };
@@ -233,9 +231,8 @@
 		C3B7E3AF216D65DA0043AC43 /* DataFuncs */ = {
 			isa = PBXGroup;
 			children = (
-				C3B7E3B0216D65ED0043AC43 /* FirebaseActions.swift */,
-				C3B7E3B2216D65F70043AC43 /* LocalActions.swift */,
 				C3B7E3B4216D65FD0043AC43 /* AuthActions.swift */,
+				C35E56A9219F0F370088113F /* Storage.swift */,
 			);
 			path = DataFuncs;
 			sourceTree = "<group>";
@@ -368,9 +365,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				C3B7E3B3216D65F70043AC43 /* LocalActions.swift in Sources */,
 				C3EBEEFB2186777D00B7F901 /* NewOptionSubView.swift in Sources */,
-				C3B7E3B1216D65ED0043AC43 /* FirebaseActions.swift in Sources */,
 				C359F0EF219257CF002F4FB9 /* SignUpController.swift in Sources */,
 				C34AF407216114F4007DD25D /* SettingsPage.swift in Sources */,
 				C3A63353215D9C9E004278E4 /* TabBar.swift in Sources */,
@@ -379,6 +374,7 @@
 				C3A6335C215DA0D5004278E4 /* InformationScreens.swift in Sources */,
 				C376B03E2187AB7B00D4C1A7 /* UIViewControllerExtension.swift in Sources */,
 				C3F0ECE02176ACFB00C0AC1B /* ColorView.swift in Sources */,
+				C35E56AA219F0F370088113F /* Storage.swift in Sources */,
 				C34AF4092161350F007DD25D /* SlantedView.swift in Sources */,
 				C359F0F12193698F002F4FB9 /* SignInController.swift in Sources */,
 				C34AF403216112E3007DD25D /* Onboarding.swift in Sources */,

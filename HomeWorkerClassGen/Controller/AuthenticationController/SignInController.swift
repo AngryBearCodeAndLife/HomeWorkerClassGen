@@ -55,31 +55,13 @@ class SignInController: UIViewController {
             
         } else {
             
-            Auth.auth().signIn(withEmail: emailField.text!, password: passwordField.text!, completion: { (user, error) in
-                if error == nil && user?.user.uid != nil {
-                    //User is signed in
-                    AuthActions.setUser()
-                    
-                    LocalActions.AutoLoggin.enable(email: self.emailField.text!, password: self.passwordField.text!, completion: { (finished) in
-                        print("Autologgin was enabled", finished)
-                    })
-                    
-                    LocalActions.AutoLoggin.enable(email: self.emailField.text!, password: self.passwordField.text!, completion: { _ in
-                        print("Atologin was enabled after signing the in")
-                    })
-                    
-                    print(user?.user.email)
-                    
+            AuthActions.setNewUser(email: emailField.text!, password: passwordField.text!) { success in
+                if success {
                     self.present(WorkView(), animated: true, completion: nil)
-                    
-//                    self.goToView(destination: "tabBarController")
                 } else {
-                    //User could not be signed in, go to the sign in view
-//                    self.goToView(destination: "signInView")
-                    //Need to do something here to show the user that they could be signed in
-                    print("couldnt be signed in")
+                    print("We coudlnt sign you in right now")
                 }
-            })
+            }
         }
         
     }
