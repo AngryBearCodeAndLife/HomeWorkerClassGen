@@ -73,7 +73,9 @@ struct DataStorage {
                     metadata.contentType = "image/jpg"
                     profileImageRef.putData(image.jpegData(compressionQuality: 0.75)!, metadata: metadata) { (sMeta, error) in
                         if error == nil {
-                            completion(true)
+                            Local.save(image, completion: { _ in
+                                completion(true)
+                            })
                         } else {
                             completion(false)
                         }
@@ -680,6 +682,187 @@ struct DataStorage {
                 completion(false)
             }
             
+        }
+    }
+    
+    struct ClassStorage {
+        
+        static func new(_ newClass: Classes, completion: @escaping (Bool) -> Void) {
+            
+            Cloud.new(newClass) { success, newKey in
+                if success {
+                    //This means that the class was saved to that directory, and the id was pushed to the user modal in the cloud as well
+                    
+                    var workWithId = newClass
+                    workWithId.id = newKey
+                    Local.saveNew(workWithId)
+                    completion(true)
+                    
+                } else {
+                    completion(false)
+                }
+            }
+            
+        }
+        
+        static func delete(andWork: Bool, completion: @escaping () -> Void) {
+            //This will be used to remoe the class from the account. Also, if true, the work will be removed that was paired with the class. This is handy, in cases like cham and google classroom when they dnt know that I am still in their class
+            
+            //NOT EVEN WORRIED ABUOT THIS, GOING TO JUST WAIT UNTIL I NEED IT
+            print("You forgot to implement the class delete thingy")
+        }
+        
+        static func fetch(_ id: String = "", completion: @escaping ([Classes]) -> Void) {
+            //This is going to be used by the work class to tell when the homework is going to be paired with which class.
+            
+            if id == "" {
+                //This means that I should return all of the classes that have been found
+                if Local.exists() {
+                    completion(Local.fetch())
+                } else {
+                    //Should look to the cloud in order to find the classes
+                   
+                    Cloud.fetch() { success, foundClasses in
+                        if success {
+                            completion(foundClasses)
+                        } else {
+                            completion([])
+                        }
+                    }
+                }
+            } else {
+                //This means that I need to return only the class with a name that matches the name in the function call
+                if Local.exists() {
+                    completion(Local.fetch())
+                } else {
+                    //Should look to the cloud in order to find the classes
+                    Cloud.fetch() { success, foundClasses in
+                        if success {
+                            var classToReturn: [Classes] = []
+                            for myClass in foundClasses {
+                                if myClass.id == id {
+                                    classToReturn.append(myClass)
+                                    completion(classToReturn)
+                                    break
+                                }
+                            }
+                        } else {
+                            completion([])
+                        }
+                    }
+                }
+            }
+            
+        }
+        
+        struct Local {
+            
+            static func fetch() -> [Classes] {
+                
+                if exists() {
+                    
+                    var returningWork: [Classes] = []
+                    
+                    do {
+                        returningWork = try Disk.retrieve("classes.json", from: Disk.Directory.caches, as: [Classes].self)
+                    } catch {
+                        returningWork = []
+                    }
+                    return returningWork
+                } else {
+                    return []
+                }
+                
+            }
+            
+            static func saveNew(_ newClass: Classes) {
+                
+                if exists() {
+                    //Get theother ones, add the new one to it, and override everythign with the new array
+                    
+                    var existingWork = fetch()
+                    existingWork.append(newClass)
+                    
+                    save(existingWork)
+                    
+                } else {
+                    //ust save it as its own file
+                    save([newClass])
+                }
+                
+            }
+            
+            static func save(_ allClasses: [Classes]) {
+                
+                try? Disk.save(allClasses, to: .caches, as: "classes.json")
+                
+            }
+            
+            static func exists() -> Bool {
+                
+                return Disk.exists("classes.json", in: .caches)
+                
+            }
+            
+        }
+        
+        struct Cloud {
+            
+            static func fetch(completion: @escaping (Bool, [Classes]) -> Void) {
+                
+                if let myUID = Auth.auth().currentUser?.uid {
+                    let path = "users/\(myUID)/classes"
+                    let ref = Database.database().reference().child(path)
+                    ref.observeSingleEvent(of: .value) { snapshot in
+                        let value = snapshot.value!
+                        let classIds = value as! [String]
+                        
+                        var returnClasses: [Classes] = []
+                        
+                        for classId in classIds {
+                            let classPath = "classes/\(classId)/name"
+                            let classRef = Database.database().reference().child(classPath)
+                            classRef.observeSingleEvent(of: .value, with: { classSnapshot in
+                                let name = classSnapshot.value! as? String
+                                var newClass = Classes(name!, byTeacher: false)
+                                newClass.id = classId
+                                returnClasses.append(newClass)
+                            })
+                        }
+                        completion(true, returnClasses)
+                    }
+                } else {
+                    completion(false, [])
+                }
+                
+            }
+            
+            static func new(_ newClass: Classes, completion: @escaping (Bool, String) -> Void) {
+                
+                if let myUID = Auth.auth().currentUser?.uid {
+                    let path = "classes"
+                    let ref = Database.database().reference().child(path).childByAutoId()
+                    let classKey = ref.key!
+                    
+                    ref.child("name").setValue(newClass.name) { (error, dataRef) in
+                        if error == nil {
+                            //Save the class to the user
+                            let userpath = "users/\(myUID)/classes"
+                            let userRef = Database.database().reference().child(userpath)
+                            //Going to need to find theother classes here, and add the new one, not just kill the others.
+                            userRef.setValue([classKey], withCompletionBlock: { (error, dataRefUser) in
+                                if error == nil {
+                                    completion(true, classKey)
+                                } else {
+                                    completion(false, String())
+                                }
+                            })
+                        } else {
+                            completion(false, String())
+                        }
+                    }
+                }
+            }
         }
     }
     

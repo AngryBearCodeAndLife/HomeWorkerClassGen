@@ -44,8 +44,6 @@ class NewClassViewController: NewOptionViewController {
         self.hideKeyboardWhenTappedAround()
         self.view.backgroundColor = UIColor.black.withAlphaComponent(0.3)
         
-        
-        
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -91,7 +89,6 @@ class NewClassViewController: NewOptionViewController {
             showStringEnter()
         } else {
             //Hide the lastview
-            
             let informationField = lastView.subViewAction as! UITextField
             classInformation = informationField.text
             
@@ -100,8 +97,8 @@ class NewClassViewController: NewOptionViewController {
                 self.lastView.frame = CGRect(x: -self.view.frame.width, y: self.lastView.frame.origin.y, width: self.lastView.frame.width, height: self.lastView.frame.height)
                 
             }) { _ in
+                //SHould tell the user somehow that the app is loading whne we are here.
                 self.createClassFinalStep()
-                self.present(WorkView(), animated: true, completion: nil)
             }
             
         }
@@ -115,6 +112,11 @@ class NewClassViewController: NewOptionViewController {
             //Send the networking request, or just write it so that the FirebaseActions has the methods to set this up
         } else {
             //Send the new generic class to the cloud under the acount uid, and then also store it locally.
+            DataStorage.ClassStorage.new(Classes(classInformation, byTeacher: false)) { success in
+                if success {
+                    self.present(WorkView(), animated: true, completion: nil)
+                }
+            }
         }
         
     }

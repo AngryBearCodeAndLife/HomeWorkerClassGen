@@ -24,7 +24,7 @@ class SignUpController: UIViewController {
     let passwordVField = UITextField()
     let emailField = UITextField()
     
-    let profileImage = UIImageView()
+    let profileImage = UIButton()
     let informationButton = UILabel()
     
     let submitButton = RoundedButtons()
@@ -32,6 +32,8 @@ class SignUpController: UIViewController {
     let signInButton = UIButton()
     
     var fieldArray: [UITextField] = []
+    
+    var imagePicker: UIImagePickerController!
     
     override func viewDidLoad() {
         self.hideKeyboardWhenTappedAround()
@@ -63,13 +65,15 @@ class SignUpController: UIViewController {
             
             //Sign in
             
-            AuthActions.createNewUser(name: nameField.text!, email: emailField.text!, password: passwordField.text!, profileImage: UIImage(named: "NewOrange")!) { success in
-                if success {
+            AuthActions.createNewUser(name: nameField.text!, email: emailField.text!, password: passwordField.text!, profileImage: profileImage.currentImage!) { success in
+                if success == true {
                     self.present(WorkView(), animated: true, completion: nil)
+                } else {
+                    "We had trouble signing you up!"
                 }
             }
             
-        }
+        } 
         
     }
     
@@ -124,6 +128,7 @@ class SignUpController: UIViewController {
         profileImage.layer.cornerRadius = 50
         profileImage.layer.masksToBounds = true
         slantedBackground.addSubview(profileImage)
+        profileImage.addTarget(self, action: #selector(chooseProfilePicture), for: .touchUpInside)
         
         informationButton.text = "i"
         informationButton.textAlignment = .center
@@ -163,4 +168,54 @@ class SignUpController: UIViewController {
         
     }
     
+    @objc func chooseProfilePicture() {
+        
+        print("Is running!!!!!!!")
+        
+        imagePicker = UIImagePickerController()
+        imagePicker.allowsEditing = true
+        imagePicker.delegate = self
+        
+        sourceFigure()
+    }
+    
+    func sourceFigure() {
+        
+        //THIS IS GOING TO NEED TO CHANGE TO SOMETHING MUCH MORE CUSTOM AND BETTER LOOKING
+        
+        let choice = UIAlertController(title: "Profile Picture Source", message: "Choose the source", preferredStyle: .actionSheet)
+        choice.addAction(UIAlertAction(title: "Camera", style: .default, handler: { (action) in
+            self.imagePicker.sourceType = .camera
+            choice.dismiss(animated: true, completion: nil)
+            self.showPicker()
+        }))
+        choice.addAction(UIAlertAction(title: "Photo Library", style: .default, handler: { (action) in
+            self.imagePicker.sourceType = .photoLibrary
+            choice.dismiss(animated: true, completion: nil)
+            self.showPicker()
+        }))
+        self.present(choice, animated: true, completion: nil)
+    }
+    
+    func showPicker() {
+        self.present(imagePicker, animated: true, completion: nil)
+    }
+    
+}
+
+
+extension SignUpController: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
+    
+    func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
+        picker.dismiss(animated: true, completion: nil)
+    }
+
+    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
+        if let pickedImage = info[UIImagePickerController.InfoKey.editedImage] as? UIImage {
+        
+            self.profileImage.setImage(pickedImage, for: .normal)
+        
+        }
+        picker.dismiss(animated: true, completion: nil)
+    }
 }

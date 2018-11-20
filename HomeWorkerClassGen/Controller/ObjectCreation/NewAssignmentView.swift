@@ -20,7 +20,7 @@ class NewAssignmentViewController: NewOptionViewController {
     var optionSubviews: [NewOptionSubView] = []
     var currentDisplayOption = -1
     
-    let classes = ["Algebra I", "Biology", "Chemistry", "US History", "English"]
+    var classes: [String] = []
     
     var newName: String!
     var newDueDate: Date!
@@ -32,6 +32,13 @@ class NewAssignmentViewController: NewOptionViewController {
     }
     
     override func viewDidLoad() {
+        
+        DataStorage.ClassStorage.fetch { foundClasses in
+            for theClass in foundClasses {
+                self.classes.append(theClass.name)
+            }
+        }
+        
         super.viewDidLoad()
         self.hideKeyboardWhenTappedAround()
         self.view.backgroundColor = UIColor.black.withAlphaComponent(0.3)
