@@ -890,7 +890,7 @@ struct DataStorage {
                                 
                                 var existingClasses: [String]!
                                 
-                                if value as? String != nil {
+                                if value as? [String] != nil {
                                     existingClasses = value as! [String]
                                 } else {
                                     existingClasses = []

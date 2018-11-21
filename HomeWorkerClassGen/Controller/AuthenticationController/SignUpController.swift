@@ -121,6 +121,7 @@ class SignUpController: UIViewController {
         emailField.textAlignment = .center
         emailField.layer.cornerRadius = 10
         emailField.layer.borderWidth = 1
+        emailField.keyboardType = .emailAddress
         slantedBackground.addSubview(emailField)
         
         profileImage.frame = CGRect(x: self.view.frame.width - 106, y: 100, width: 100, height: 100)

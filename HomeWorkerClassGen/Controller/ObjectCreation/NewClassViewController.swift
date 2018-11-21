@@ -160,6 +160,7 @@ class NewClassViewController: NewOptionViewController {
         classInformationField.placeholder = classWithCode ? "Class Code" : "Class Name"
         classInformationField.font = UIFont.systemFont(ofSize: 20)
         classInformationField.textColor = UIColor.retrieveMainColor(withAlpha: 1.0)
+        classInformationField.textAlignment = .center
         classInformationField.keyboardType = classWithCode ? UIKeyboardType.numberPad : UIKeyboardType.default
         
         lastView.subViewAction = classInformationField

@@ -27,6 +27,8 @@ class SettingsPage: UIViewController {
     let changeEmailButton = RoundedButtons()
     let signOutButton = RoundedButtons()
     
+    var imagePicker: UIImagePickerController!
+    
     func moveView() {
         
         DataStorage.User.Name.fetch { (success, name) in
@@ -59,12 +61,16 @@ class SettingsPage: UIViewController {
             self.profilePictureView.image = profile
         }
         
+        let changeProfileTap = UITapGestureRecognizer(target: self, action: #selector(changeProfileImage))
+        
         profilePictureView.backgroundColor = UIColor.gray
         profilePictureView.frame = CGRect(x: self.view.frame.width * 0.5 - (self.view.frame.width * 0.3), y: slantedViewBack.frame.height + 20, width: self.view.frame.width * 0.6, height: self.view.frame.width * 0.6)
         profilePictureView.layer.cornerRadius = profilePictureView.frame.width / 2
         profilePictureView.layer.masksToBounds = true
+        profilePictureView.isUserInteractionEnabled = true
         
         self.view.addSubview(profilePictureView)
+        profilePictureView.addGestureRecognizer(changeProfileTap)
         
         //Change password button
         changePasswordButton.setTitle("Change Password", for: .normal)
@@ -137,6 +143,34 @@ class SettingsPage: UIViewController {
         }
     }
     
+    @objc func changeProfileImage() {
+        //This funciton is called when the image view has been tapped on.
+        imagePicker = UIImagePickerController()
+        imagePicker.allowsEditing = true
+        imagePicker.delegate = self
+        
+        sourceFigure()
+    }
+    
+    func sourceFigure() {
+        let choice = UIAlertController(title: "New Picture Source", message: "Where would you like to import the new image from?", preferredStyle: .actionSheet)
+        choice.addAction(UIAlertAction(title: "Camera", style: .default, handler: { (action) in
+            self.imagePicker.sourceType = .camera
+            choice.dismiss(animated: true, completion: nil)
+            self.showPicker()
+        }))
+        choice.addAction(UIAlertAction(title: "Photo Library", style: .default, handler: { (action) in
+            self.imagePicker.sourceType = .photoLibrary
+            choice.dismiss(animated: true, completion: nil)
+            self.showPicker()
+        }))
+        self.present(choice, animated: true, completion: nil)
+    }
+    
+    func showPicker() {
+        self.present(imagePicker, animated: true, completion: nil)
+    }
+    
     @objc private func signOut() {
         
         AuthActions.signOut()
@@ -167,6 +201,24 @@ class SettingsPage: UIViewController {
         
         moveView()
         
+    }
+    
+}
+
+extension SettingsPage: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
+    
+    func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
+        picker.dismiss(animated: true, completion: nil)
+    }
+    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
+        if let pickedImage = info[UIImagePickerController.InfoKey.editedImage] as? UIImage {
+            self.profilePictureView.image = pickedImage
+            print("Loading the change of profile images")
+            DataStorage.User.ProfileImage.save(pickedImage) { success in
+                print("Was succesfully able to save the profile picture and change it!", success)
+            }
+        }
+        picker.dismiss(animated: true, completion: nil)
     }
     
 }

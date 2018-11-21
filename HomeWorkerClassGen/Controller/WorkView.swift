@@ -28,6 +28,16 @@ class WorkView: UIViewController, UITableViewDelegate, UITableViewDataSource {
     
     var topBar: TabBar!
     
+    var middleBox = UIView()
+    
+    //Middle box items
+    var organizeButton = UIButton()
+    var statusLabel = UILabel()
+    var isShowingMiddle = false
+    var alphaOrganize: UIButton!
+    var dateOrganize: UIButton!
+    var classOrganize: UIButton!
+    
     override func viewDidLoad() {
         
         self.view.backgroundColor = UIColor.white
@@ -48,11 +58,122 @@ class WorkView: UIViewController, UITableViewDelegate, UITableViewDataSource {
         topBar.width = 200
         topBar.parentView = self
         self.view.addSubview(topBar)
+        
+        middleBox.frame = CGRect(x: 0, y: 80, width: self.view.frame.width, height: 35)
+        middleBox.backgroundColor = UIColor.retrieveMainColor(withAlpha: 0.1)
+        self.view.addSubview(middleBox)
+        
+        placeItemsMiddleBox()
     }
+    
+    func placeItemsMiddleBox() {
+    
+        organizeButton.frame = CGRect(x: 10, y: 2.5, width: 40, height: 30)
+        organizeButton.layer.cornerRadius = 15
+        organizeButton.backgroundColor = UIColor.retrieveMainColor(withAlpha: 1.0)
+        organizeButton.addTarget(self, action: #selector(organizeDropdown), for: .touchUpInside)
+        middleBox.addSubview(organizeButton)
+        
+        alphaOrganize = UIButton(frame: organizeButton.frame)
+        dateOrganize = UIButton(frame: organizeButton.frame)
+        classOrganize = UIButton(frame: organizeButton.frame)
+        
+        statusLabel.frame = CGRect(x: 0, y: 0, width: self.view.frame.width, height: 30)
+        statusLabel.textAlignment = .center
+        statusLabel.textColor = UIColor.retrieveMainColor(withAlpha: 1.0)
+        statusLabel.font = UIFont.systemFont(ofSize: 18, weight: UIFont.Weight.thin)
+        statusLabel.text = "Last Update: 5 Min ago"
+        middleBox.addSubview(statusLabel)
+    }
+    
+    @objc func organizeDropdown() {
+        
+        if isShowingMiddle == false {
+            //Need to create the new organize options here
+            
+            alphaOrganize.backgroundColor = UIColor.retrieveMainColor(withAlpha: 1.0)
+            alphaOrganize.addTarget(self, action: #selector(organizeByName), for: .touchUpInside)
+            alphaOrganize.layer.cornerRadius = 15
+            alphaOrganize.setTitle("By Name", for: .normal)
+            alphaOrganize.setTitleColor(UIColor.white.withAlphaComponent(0.0), for: .normal)
+            
+            dateOrganize.backgroundColor = UIColor.retrieveMainColor(withAlpha: 1.0)
+            dateOrganize.addTarget(self, action: #selector(organizeByDate), for: .touchUpInside)
+            dateOrganize.layer.cornerRadius = 15
+            dateOrganize.setTitle("By Date", for: .normal)
+            dateOrganize.setTitleColor(UIColor.white.withAlphaComponent(0.0), for: .normal)
+            
+            classOrganize.backgroundColor = UIColor.retrieveMainColor(withAlpha: 1.0)
+            classOrganize.addTarget(self, action: #selector(organizeByClass), for: .touchUpInside)
+            classOrganize.layer.cornerRadius = 15
+            classOrganize.setTitle("By Class", for: .normal)
+            classOrganize.setTitleColor(UIColor.white.withAlphaComponent(0.0), for: .normal)
+            middleBox.addSubview(alphaOrganize)
+            middleBox.addSubview(dateOrganize)
+            middleBox.addSubview(classOrganize)
+            
+            UIView.animate(withDuration: 0.5, animations: {
+                self.statusLabel.textColor = UIColor.retrieveMainColor(withAlpha: 0.0)
+                let organizeFrameWidth = (self.view.frame.width - 90) / 3
+                self.alphaOrganize.alpha = 1.0
+                self.dateOrganize.alpha = 1.0
+                self.classOrganize.alpha = 1.0
+                self.alphaOrganize.frame = CGRect(x: 60, y: 2.5, width: organizeFrameWidth, height: 30)
+                self.alphaOrganize.setTitleColor(UIColor.white, for: .normal)
+                self.dateOrganize.frame = CGRect(x: 70 + organizeFrameWidth, y: 2.5, width: organizeFrameWidth, height: 30)
+                self.dateOrganize.setTitleColor(UIColor.white, for: .normal)
+                self.classOrganize.frame = CGRect(x: 80 + (organizeFrameWidth * 2), y: 2.5, width: organizeFrameWidth, height: 30)
+                self.classOrganize.setTitleColor(UIColor.white, for: .normal)
+            }) { _ in
+                self.isShowingMiddle = true
+            }
+        } else {
+            UIView.animate(withDuration: 0.5, animations: {
+                self.statusLabel.textColor = UIColor.retrieveMainColor(withAlpha: 1.0)
+                self.alphaOrganize.frame = self.organizeButton.frame
+                self.dateOrganize.frame = self.organizeButton.frame
+                self.classOrganize.frame = self.organizeButton.frame
+                self.alphaOrganize.alpha = 0.0
+                self.dateOrganize.alpha = 0.0
+                self.classOrganize.alpha = 0.0
+            }) { _ in
+                self.isShowingMiddle = false
+            }
+        }
+    }
+    
+    @objc func organizeByClass() {
+        print("organizing by class")
+        work = work.sorted(by: { $0.assignee < $1.assignee })
+        let range = NSMakeRange(0, self.table.numberOfSections)
+        let sections = NSIndexSet(indexesIn: range)
+        self.table.reloadSections(sections as IndexSet, with: .automatic)
+        organizeDropdown()
+    }
+    
+    @objc func organizeByDate() {
+        
+        print("Organizing by date")
+        work = work.sorted(by: { WorkTools.turnToDate(dateString: $0.endDateString) < WorkTools.turnToDate(dateString: $1.endDateString) })
+        let range = NSMakeRange(0, self.table.numberOfSections)
+        let sections = NSIndexSet(indexesIn: range)
+        self.table.reloadSections(sections as IndexSet, with: .automatic)
+        organizeDropdown()
+    }
+    
+    @objc func organizeByName() {
+        work = work.sorted(by: { $0.assignmentName < $1.assignmentName })
+        let range = NSMakeRange(0, self.table.numberOfSections)
+        let sections = NSIndexSet(indexesIn: range)
+        self.table.reloadSections(sections as IndexSet, with: .automatic)
+        organizeDropdown()
+    }
+    
+//    A -> Z
     
     func placeTableView() {
         
-        table.frame = CGRect(x: 0, y: 80, width: self.view.frame.width, height: self.view.frame.height - 80)
+        table.frame = CGRect(x: 0, y: 115, width: self.view.frame.width, height: self.view.frame.height - 115)
         table.delegate = self
         table.dataSource = self
         
@@ -98,7 +219,7 @@ class WorkView: UIViewController, UITableViewDelegate, UITableViewDataSource {
         if work.count - 1 >= indexPath.row {
             return 80
         } else {
-            return self.view.frame.height - 80
+            return self.view.frame.height - 115
         }
     }
     
@@ -115,7 +236,7 @@ class WorkView: UIViewController, UITableViewDelegate, UITableViewDataSource {
         } else {
             let cell = table.dequeueReusableCell(withIdentifier: "finishThat") as! PhotoCell
             cell.viewWidth = self.view.frame.width
-            cell.viewHeight = self.view.frame.height - 80
+            cell.viewHeight = self.view.frame.height - 115
             if work.count > 0 {
                 //There was some work
                 cell.hasOtherWork = true
