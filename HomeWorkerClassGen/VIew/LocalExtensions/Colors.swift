@@ -29,6 +29,8 @@ extension UIColor {
     public static let mainColorOptionCount = 8
     public static let mainColorArray = [mainGreen, mainBlue, mainRed, mainPurple, mainYellow, mainOrange, mainPink, mainTeal]
     
+    public static let warningColor = UIColor(red: 255/255, green: 38/255, blue: 38/255, alpha: 1.0)
+    
     public static func retrieveMainColor(withAlpha tint: CGFloat) -> UIColor {
         guard let color = UserDefaults.standard.colorForKey(key: "mainColor") else { return mainGreen.withAlphaComponent(tint) }
         return color.withAlphaComponent(tint)

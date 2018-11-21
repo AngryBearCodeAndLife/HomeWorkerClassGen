@@ -21,6 +21,7 @@ class TabBar: UIView {
     public var optionSet: [String] = []
     
     var parentView: UIViewController!
+    public var backView: UIViewController!
     
     var optionLabels: [UILabel] = []
     
@@ -32,6 +33,8 @@ class TabBar: UIView {
     
     init(frame: CGRect, leftItem: Bool) {
         super.init(frame: frame)
+        
+        backView = WorkView()
         
         self.backgroundColor = UIColor.retrieveMainColor(withAlpha: 1.0)
         
@@ -111,7 +114,7 @@ class TabBar: UIView {
     }
     
     @objc private func showWorkPage() {
-        self.parentView.present(WorkView(), animated: true, completion: nil)
+        self.parentView.present(backView, animated: true, completion: nil)
     }
     
     public func optionFunction(_ location: CGPoint) {
@@ -135,6 +138,9 @@ class TabBar: UIView {
                 } else if label.text == "New Note" {
                     let thisParentView = parentView as! AssignmentView
                     thisParentView.newNote()
+                } else if label.text == "Add Drawing To Picture" {
+                    let thisParentView = parentView as! AssignmentImageView
+                    thisParentView.addDrawing()
                 }
             }
          }
@@ -163,7 +169,10 @@ class TabBar: UIView {
                 label.frame = self.newItemButton.frame
                 label.layer.cornerRadius = 35
                 label.alpha = 0.0
-                self.frame = CGRect(x: 0, y: 0, width: self.frame.width, height: 80)
+                
+                if self.optionSet[0] != "Add Drawing To Picture" {
+                    self.frame = CGRect(x: 0, y: 0, width: self.frame.width, height: 80)
+                }
                 
             }) { _ in
                 label.removeFromSuperview()

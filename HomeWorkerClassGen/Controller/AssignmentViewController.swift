@@ -193,6 +193,11 @@ class AssignmentView: UIViewController, UICollectionViewDelegate, UICollectionVi
         if collectionView == pictureCollection {
             if indexPath.row == thisWorkImages.count {
                 newPicture()
+            } else {
+                let imageView = AssignmentImageView()
+                imageView.thisWork = thisWork
+                imageView.thisImage = thisWork.images[indexPath.row]
+                self.present(imageView, animated: true, completion: nil)
             }
         }
     }
