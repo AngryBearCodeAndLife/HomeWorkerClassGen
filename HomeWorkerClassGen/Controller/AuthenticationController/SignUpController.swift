@@ -69,7 +69,7 @@ class SignUpController: UIViewController {
                 if success == true {
                     self.present(WorkView(), animated: true, completion: nil)
                 } else {
-                    "We had trouble signing you up!"
+                    print("We had trouble signing you up!")
                 }
             }
             

@@ -28,6 +28,8 @@ class TabBar: UIView {
     
     var canShowNewOptions = true
     
+    public var parentIsAssignmentView: Bool! = false
+    
     init(frame: CGRect, leftItem: Bool) {
         super.init(frame: frame)
         
@@ -126,6 +128,13 @@ class TabBar: UIView {
                 } else if label.text == "New Class" {
                     print("We are going to create a new class")
                     createClass()
+                } else if label.text == "New Picture" {
+                    //This one and the next one can only be called is the parent view was assignment view, as that is the only place where these will be used. So, we can assume that the view is assignment view, make the functions there, and just call a parentView.function()
+                    let thisParentView = parentView as! AssignmentView
+                    thisParentView.newPicture()
+                } else if label.text == "New Note" {
+                    let thisParentView = parentView as! AssignmentView
+                    thisParentView.newNote()
                 }
             }
          }
@@ -170,6 +179,7 @@ class TabBar: UIView {
         
         if isShowingOptions == false {
             optionLabels.removeAll()
+            
             var newFrame = CGRect(x: self.frame.width / 2 - CGFloat(0.5) * width, y: 90, width: width, height: 50)
             
             for option in optionSet {

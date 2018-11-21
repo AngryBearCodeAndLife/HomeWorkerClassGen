@@ -66,7 +66,7 @@ class HomeWorkCell: UITableViewCell {
         timeLeftLabel.frame = CGRect(x: width - 206, y: 42, width: 200, height: 30)
         self.addSubview(timeLeftLabel)
         
-        self.addGestureRecognizer(tap)
+//        self.addGestureRecognizer(tap)
 
     }
     

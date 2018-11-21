@@ -82,8 +82,9 @@ class WorkView: UIViewController, UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
         if indexPath.row != self.work.count {
+            //This means that the row that was selected was not the last one, aka the one with the picture on it
             let assignmentView = AssignmentView()
-            
+            assignmentView.thisWork = work[indexPath.row]
             self.present(assignmentView, animated: true, completion: nil)
         }
     }

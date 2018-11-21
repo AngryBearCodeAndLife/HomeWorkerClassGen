@@ -341,21 +341,19 @@ struct DataStorage {
             static func save(_ newId: String, completion: @escaping () -> Void) {
                 //This function is going to save the uid to the user. Only called from the WorkObjects.save()
                 
-                exists { found in
+                exists { found, works in
                     if found {
                         
                         var idArray: [String] = []
+                            
+                        idArray = works
+                        idArray.append(newId)
                         
-                        fetch(completion: { existingIDS in
+                        push(idArray)
+                        
+                        completion()
                             
-                            idArray = existingIDS
-                            idArray.append(newId)
-                            
-                            push(idArray)
-                            
-                            completion()
-                            
-                        })
+                        
                         
                     } else {
                         
@@ -398,17 +396,18 @@ struct DataStorage {
                 
             }
             
-            static func exists(completion: @escaping (Bool) -> Void) {
+            static func exists(completion: @escaping (Bool, [String]) -> Void) {
                 
                 if let myUID = Auth.auth().currentUser?.uid {
                     
                     let workPath = "users/\(myUID)/work"
                     let ref = Database.database().reference().child(workPath)
                     ref.observeSingleEvent(of: .value) { snapshot in
-                        if snapshot.hasChild("0") {
-                            completion(true)
+                        let workArray = snapshot.value! as? [String]
+                        if workArray != [] || workArray != nil {
+                            completion(true, workArray!)
                         } else {
-                            completion(false)
+                            completion(false, [])
                         }
                     }
                     
@@ -440,15 +439,26 @@ struct DataStorage {
                 //Called when we are updating the view, or logging back into the app
                 
                 //Should pull everything from the cloud, resave it locally, and then return what we needed
-                Cloud.fetch { works in
-                    
-                    Local.save(works)
-                    completion(works)
-                    
-                }
                 
+                if Local.exists() {
+                    completion(Local.fetch())
+                } else {
+                    Cloud.fetch { works in
+                        
+                        for work in works {
+                            for imgId in work.images {
+                                DataStorage.WorkImages.Cloud.fetch(imgId, for: work, completion: { newImage in
+                                    DataStorage.WorkImages.Local.save(newImage, to: work, with: imgId, completion: { _ in })
+                                })
+                            }
+                        }
+                        
+                        Local.save(works)
+                        completion(works)
+                        
+                    }
+                }
             }
-            
         }
         
         static func save(_ newWork: HomeWork, completion: @escaping () -> Void) {
@@ -498,7 +508,7 @@ struct DataStorage {
             }
             
             static func fetch(completion: @escaping ([HomeWork]) -> Void) {
-                User.Work.exists { found in
+                User.Work.exists { found, _ in
                     if found {
                         User.Work.fetch { ids in
                             var finalWork: [HomeWork] = []
@@ -602,7 +612,6 @@ struct DataStorage {
                 
                 do {
                     retrievedArray = try Disk.retrieve("work.json", from: .caches, as: [HomeWork].self)
-                    try Disk.remove("work.json", from: .caches)
                 } catch {
                     retrievedArray = []
                 }
@@ -687,6 +696,19 @@ struct DataStorage {
     
     struct ClassStorage {
         
+        static func pullFromCloud(completion: @escaping (Bool) -> Void = { _ in }) {
+            
+            Cloud.fetch { (success, foundClasses) in
+                if success {
+                    Local.save(foundClasses)
+                    completion(true)
+                } else {
+                    completion(false)
+                }
+            }
+            
+        }
+        
         static func new(_ newClass: Classes, completion: @escaping (Bool) -> Void) {
             
             Cloud.new(newClass) { success, newKey in
@@ -756,6 +778,10 @@ struct DataStorage {
         }
         
         struct Local {
+            
+            static func delete() {
+                try? Disk.remove("classes.json", from: .caches)
+            }
             
             static func fetch() -> [Classes] {
                 
@@ -850,13 +876,22 @@ struct DataStorage {
                             let userpath = "users/\(myUID)/classes"
                             let userRef = Database.database().reference().child(userpath)
                             //Going to need to find theother classes here, and add the new one, not just kill the others.
-                            userRef.setValue([classKey], withCompletionBlock: { (error, dataRefUser) in
-                                if error == nil {
-                                    completion(true, classKey)
-                                } else {
-                                    completion(false, String())
-                                }
+                            
+                            userRef.observeSingleEvent(of: .value, with: { snapshot in
+                                
+                                var existingClasses = snapshot.value! as! [String]
+                                existingClasses.append(classKey)
+                                userRef.setValue(existingClasses, withCompletionBlock: { (error, dataRefUser) in
+                                    if error == nil {
+                                        completion(true, classKey)
+                                    } else {
+                                        completion(false, String())
+                                    }
+                                })
+                                
                             })
+                            
+                            
                         } else {
                             completion(false, String())
                         }
@@ -867,6 +902,173 @@ struct DataStorage {
     }
     
     struct WorkImages {
+        
+        //NOTE: I have no way of finding these images when I sign back in right now. They will be gone as soon as I sign out forcefully. Well, stuck in storage, but not accessible
+        
+        static func newImage(_ image: UIImage, with work: HomeWork, completion: @escaping (Bool) -> Void) {
+            
+            print("Trying to run the newImage function to save it")
+            
+            Cloud.new(image, with: work) { success, newKey in
+                if success {
+                    Local.save(image, to: work, with: newKey, completion: { success in
+                        if success {
+                            completion(true)
+                        } else {
+                            completion(false)
+                        }
+                    })
+                } else {
+                    completion(false)
+                }
+            }
+            
+        }
+        
+        static func removeImage(_ id: String, completion: @escaping (Bool) -> Void) {
+            //Not going to worry about this right now, dont need to talk abuot it, since I have no way to do it
+        }
+        
+        static func fetch(for work: HomeWork) -> [UIImage] {
+            var images: [UIImage] = []
+            for imageId in work.images {
+                images.append(Local.fetch(imageId))
+            }
+            return images
+        }
+        
+        struct Local {
+            static func delete() {
+                do {
+                    try Disk.remove("workImg/", from: .caches)
+                } catch {
+                    print("There was cause for alarm, we couldnt delete all of the work imgs while signing out this user")
+                }
+            }
+            
+            static func fetch(_ id: String) -> UIImage {
+                
+                do {
+                    let newImage = try Disk.retrieve("workImg/\(id).jpeg", from: .caches, as: UIImage.self)
+                    return newImage
+                } catch {
+                    print("Cannot find the image that you want")
+                    return UIImage()
+                }
+                
+            }
+            
+            static func save(_ image: UIImage, to work: HomeWork, with id: String, completion: @escaping (Bool) -> Void) {
+                //here we are going to have to save the image to local storage using the id that was given from the cloud
+                do {
+                    try Disk.save(image, to: .caches, as: "workImg/\(id).jpeg")
+                } catch {
+                    print("We were unable to save the image to local storage. This is cause for alarm")
+                }
+                
+                //Then we are going to have to pull back the work that is in the storage, and change the one image thing in the homework, and resave the rest of it
+                
+                let foundWorks = DataStorage.WorkObjects.Local.fetch()
+                var toChangeWork: HomeWork!
+                for hiddenWork in foundWorks {
+                    if hiddenWork.uid == work.uid {
+                        DataStorage.WorkObjects.Local.delete(hiddenWork.uid)
+                        toChangeWork = hiddenWork
+                        toChangeWork.images.append(id)
+                        print("This is the work that I am saving to local storage after giving it an image")
+                        DataStorage.WorkObjects.Local.save(toChangeWork)
+                        completion(true)
+                    }
+                }
+            }
+        }
+        
+        struct Cloud {
+            
+            static func new(_ image: UIImage, with work: HomeWork, completion: @escaping (Bool, String) -> Void) {
+                if let myUID = Auth.auth().currentUser?.uid {
+                    
+                    print("my current uid: ", myUID)
+                    
+                    let path = "work/\(work.uid!)/images"
+                    print("This is the work Id that I am working with: ", work.uid!)
+                    let keyRef = Database.database().reference().childByAutoId()
+                    let newKey = keyRef.key
+                    
+                    print("This is the new image key that I will be putting in thelist of images for that work: ", newKey!)
+                    
+                    let trueRef = Database.database().reference().child(path)
+                    
+                    fetch(for: work) { ids in
+                        
+                        var newIds = ids
+                        newIds.append(newKey!)
+                        
+                        print("These are the ids that I will be putting into the cloud, it should have all of the other ids associated with this work")
+                        print(newIds)
+                        
+                        trueRef.setValue(newIds, withCompletionBlock: { error, _ in
+                            if error == nil {
+                                //Now the new id has been associated with the image that hasnt been uploaded to storage. Do that here
+                                
+                                let storagePath = "workImgs/\(myUID)/\(work.uid!)/\(newKey!).jpeg"
+                                let storageRef = Storage.storage().reference().child(storagePath)
+                                let imgToUp = image.jpegData(compressionQuality: 1.0)
+                                let metaData = StorageMetadata()
+                                metaData.contentType = "image/jpg"
+                                storageRef.putData(imgToUp!, metadata: metaData, completion: { (sMeta, error) in
+                                    if error == nil {
+                                        completion(true, newKey!)
+                                    } else {
+                                        completion(false, String())
+                                    }
+                                })
+                                
+                            } else {
+                                completion(false, String())
+                            }
+                        })
+                        
+                    }
+                    
+                }
+            }
+            
+            static func fetch(_ id: String, for work: HomeWork, completion: @escaping (UIImage) -> Void) {
+                
+                if let myUID = Auth.auth().currentUser?.uid {
+                    
+                    let path = "workImgs/\(myUID)/\(work.uid!)/\(id).jpeg"
+                    let storage = Storage.storage().reference().child(path)
+                    
+                    storage.getData(maxSize: 1 * 10240 * 10240) { (data, error) in
+                        if error == nil {
+                            completion(UIImage(data: data!)!)
+                        } else {
+                            completion(UIImage())
+                        }
+                    }
+                    
+                }
+                
+            }
+            
+            static func fetch(for work: HomeWork, completion: @escaping ([String]) -> Void) {
+                
+                let path = "work/\(work.uid!)/images"
+                let dataRef = Database.database().reference().child(path)
+                
+                dataRef.observeSingleEvent(of: .value) { snapshot in
+                    var workImageIds = snapshot.value! as? [String]
+                    if workImageIds == nil {
+                        workImageIds = []
+                    }
+                    completion(workImageIds!)
+                }
+                
+            }
+            
+        }
         
     }
     

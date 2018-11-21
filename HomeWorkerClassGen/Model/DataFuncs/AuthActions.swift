@@ -59,8 +59,12 @@ struct AuthActions {
                         let wasChanged = snapshot.value! as? Bool
                         
                         if wasChanged! {
-                            DataStorage.WorkObjects.fetch(completion: { _ in
+                            DataStorage.WorkObjects.fetch(completion: { works in
+                                print("All of the works that were found in the cloud while signing in", works)
+                                DataStorage.WorkObjects.Local.save(works)
+                                
                                 changeRef.setValue(false)
+                                DataStorage.ClassStorage.pullFromCloud()
                                 completion(true)
                             })
                         } else {
@@ -86,6 +90,7 @@ struct AuthActions {
                 DataStorage.User.Name.fetch(completion: { (found, name) in
                     if found == true && name != "" {
                         DataStorage.WorkObjects.fetch(completion: { _ in
+                            DataStorage.ClassStorage.pullFromCloud()
                             completion(true)
                         })
                     } else {
@@ -108,6 +113,8 @@ struct AuthActions {
         DataStorage.User.Name.delete()
         DataStorage.User.ProfileImage.delete()
         DataStorage.AutoLoggin.disable()
+        DataStorage.ClassStorage.Local.delete()
+        DataStorage.WorkImages.Local.delete()
         
     }
     
