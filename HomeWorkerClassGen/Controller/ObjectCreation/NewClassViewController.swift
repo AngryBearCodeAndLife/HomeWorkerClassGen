@@ -34,6 +34,9 @@ class NewClassViewController: NewOptionViewController {
     
     var classInformation: String!
     
+    public var pushedFromAssignment = false
+    public var assignmentWithoutClass: HomeWork!
+    
     //Use this to hide the status bar
     override var prefersStatusBarHidden: Bool {
         return true
@@ -51,7 +54,7 @@ class NewClassViewController: NewOptionViewController {
     }
     
     private func showDecision() {
-        whichClassView.titleString = "New Class"
+        whichClassView.titleString = pushedFromAssignment ? "New Class For Assignment" : "New Class"
         whichClassView.buttonString = "Enter Class Code"
         whichClassView.parentViewController = self
         //Configure the center item
@@ -114,7 +117,19 @@ class NewClassViewController: NewOptionViewController {
             //Send the new generic class to the cloud under the acount uid, and then also store it locally.
             DataStorage.ClassStorage.new(Classes(classInformation, byTeacher: false)) { success in
                 if success {
-                    self.present(WorkView(), animated: true, completion: nil)
+                    
+                    if self.pushedFromAssignment {
+                        
+                        let newAssignment = HomeWork(self.assignmentWithoutClass.assignmentName, self.classInformation, true, WorkTools.turnToDate(dateString: self.assignmentWithoutClass.endDateString), "realfbualfsu")
+                        
+                        DataStorage.WorkObjects.save(newAssignment, completion: {
+                            self.present(WorkView(), animated: true, completion: nil)
+                        })
+                    } else {
+                        self.present(WorkView(), animated: true, completion: nil)
+                    }
+                } else {
+                    print("We had trouble saving your new class")
                 }
             }
         }
@@ -136,7 +151,8 @@ class NewClassViewController: NewOptionViewController {
         decisionMade = true
         
         lastView.titleString = classWithCode ? "Enter Code From Teacher" : "Enter Your Class Name"
-        lastView.buttonString = classWithCode ? "Join Class" : "Create Class"
+        //NOTE: Going to have to change this when we move to having teacher created classes we well
+        lastView.buttonString = pushedFromAssignment ? "Create Class And Work" : "Create Class"
         lastView.parentViewController = self
         //Configure the center item
         

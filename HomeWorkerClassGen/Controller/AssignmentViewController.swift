@@ -126,7 +126,6 @@ class AssignmentView: UIViewController, UICollectionViewDelegate, UICollectionVi
         pictureCollection.delegate = self
         pictureCollection.dataSource = self
         pictureCollection.backgroundColor = UIColor.white
-//        pictureCollection.backgroundColor = .blue//getrid of me later
         pictureCollection.contentInset = UIEdgeInsets(top: 0, left: 15, bottom: 0, right: 15)
         self.view.addSubview(pictureCollection)
         
@@ -134,7 +133,6 @@ class AssignmentView: UIViewController, UICollectionViewDelegate, UICollectionVi
 //        noteCollection.delegate = self
 //        noteCollection.dataSource = self
 //        noteCollection.backgroundColor = UIColor.white
-//        noteCollection.backgroundColor = .green //et rid of me later
 //        noteCollection.contentInset = UIEdgeInsets(top: 0, left: 15, bottom: 0, right: 15)
 //        self.view.addSubview(noteCollection)
         
@@ -178,7 +176,7 @@ class AssignmentView: UIViewController, UICollectionViewDelegate, UICollectionVi
         if collectionView == pictureCollection {
             //Return the number of pictures in the homework assignment
             print("We are giving the picturw colection view this many images", thisWorkImages.count)
-            return thisWorkImages.count
+            return thisWorkImages.count + 1
         } else {
             //Return the number of notes in an assignment
             return 5
@@ -191,12 +189,25 @@ class AssignmentView: UIViewController, UICollectionViewDelegate, UICollectionVi
         return 15
     }
     
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        if collectionView == pictureCollection {
+            if indexPath.row == thisWorkImages.count {
+                newPicture()
+            }
+        }
+    }
+    
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         print("This is the indexpath.row that i am talkign about", indexPath.row)
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "cellId", for: indexPath) as! AssignmentCell
         if collectionView == pictureCollection {
             print(indexPath)
-            cell.picture = thisWorkImages[indexPath.row]
+            if indexPath.row < thisWorkImages.count {
+                cell.picture = thisWorkImages[indexPath.row]
+            } else {
+                let newImageName = "New" + UIColor.retrieveMainColorName()
+                cell.picture = UIImage(named: newImageName)
+            }
         } else {
             cell.title = "Hello world!"
         }

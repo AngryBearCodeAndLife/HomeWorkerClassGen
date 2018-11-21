@@ -404,7 +404,7 @@ struct DataStorage {
                     let ref = Database.database().reference().child(workPath)
                     ref.observeSingleEvent(of: .value) { snapshot in
                         let workArray = snapshot.value! as? [String]
-                        if workArray != [] || workArray != nil {
+                        if workArray != [] && workArray != nil {
                             completion(true, workArray!)
                         } else {
                             completion(false, [])
@@ -841,7 +841,14 @@ struct DataStorage {
                     let ref = Database.database().reference().child(path)
                     ref.observeSingleEvent(of: .value) { snapshot in
                         let value = snapshot.value!
-                        let classIds = value as! [String]
+                        
+                        var classIds: [String]!
+                        
+                        if value as? String != nil {
+                            classIds = value as! [String]
+                        } else {
+                            classIds = []
+                        }
                         
                         var returnClasses: [Classes] = []
                         
@@ -879,7 +886,16 @@ struct DataStorage {
                             
                             userRef.observeSingleEvent(of: .value, with: { snapshot in
                                 
-                                var existingClasses = snapshot.value! as! [String]
+                                let value = snapshot.value!
+                                
+                                var existingClasses: [String]!
+                                
+                                if value as? String != nil {
+                                    existingClasses = value as! [String]
+                                } else {
+                                    existingClasses = []
+                                }
+                                
                                 existingClasses.append(classKey)
                                 userRef.setValue(existingClasses, withCompletionBlock: { (error, dataRefUser) in
                                     if error == nil {

@@ -61,6 +61,7 @@ class AssignmentCell: UICollectionViewCell {
     func setImageView() {
         
         imageView = UIImageView(image: picture)
+        imageView.contentMode = .scaleAspectFit
         imageView.frame = CGRect(x: 10, y: 10, width: self.frame.width - 20, height: self.frame.height - 20)
         self.addSubview(imageView)
         

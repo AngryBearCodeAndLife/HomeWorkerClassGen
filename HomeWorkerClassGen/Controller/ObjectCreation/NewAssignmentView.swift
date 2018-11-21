@@ -41,7 +41,7 @@ class NewAssignmentViewController: NewOptionViewController {
         
         super.viewDidLoad()
         self.hideKeyboardWhenTappedAround()
-        self.view.backgroundColor = UIColor.black.withAlphaComponent(0.3)
+        self.view.backgroundColor = UIColor.black.withAlphaComponent(0.0)
         
 //        sleep(5)
         
@@ -105,6 +105,11 @@ class NewAssignmentViewController: NewOptionViewController {
     
     override func viewDidAppear(_ animated: Bool) {
         showNextOption()
+        
+        UIView.animate(withDuration: 0.3) {
+            self.view.backgroundColor = UIColor.black.withAlphaComponent(0.3)
+        }
+        
     }
     
     override func showNextOption() {
@@ -153,16 +158,30 @@ class NewAssignmentViewController: NewOptionViewController {
             
             self.newDueDate = dateView.date
             
-            currentDisplayOption += 1
+            //What we need to do here is to check if our classes have anything in them. if they do, then we are ok to show the class picker
+            //If not, we need to cut to the creating a new class view, which dismisses itself, and then show the class picker
             
-            self.view.addSubview(optionSubviews[currentDisplayOption])
-            
-            UIView.animate(withDuration: 0.4, animations: {
-                print(self.currentDisplayOption)
-                self.optionSubviews[self.currentDisplayOption - 1].frame = CGRect(x: -self.view.frame.width, y: self.optionSubviews[self.currentDisplayOption - 1].frame.origin.y, width: self.optionSubviews[self.currentDisplayOption - 1].frame.width, height: self.optionSubviews[self.currentDisplayOption - 1].frame.height)
-                self.optionSubviews[self.currentDisplayOption].frame = CGRect(x: 30, y: (self.view.frame.height / 2) - (self.optionSubviews[self.currentDisplayOption].figureHeight() / 2), width: self.view.frame.width - 80, height: self.optionSubviews[self.currentDisplayOption].figureHeight())
-            }) { _ in
+            if classes == [] {
+                //This means we need to show the make a new class option
+                
+                let newClassView = NewClassViewController()
+                newClassView.pushedFromAssignment = true
+                newClassView.assignmentWithoutClass = HomeWork(newName, "", true, newDueDate, "reifuboiwaufeb")
+                self.present(newClassView, animated: true, completion: nil)
+                
+            } else {
+                
+                currentDisplayOption += 1
+                self.view.addSubview(optionSubviews[currentDisplayOption])
                 print("What is going on here, im gone! I just hid one of the inbetween ones")
+                //We can move on like normal
+                UIView.animate(withDuration: 0.4, animations: {
+                    print(self.currentDisplayOption)
+                    self.optionSubviews[self.currentDisplayOption - 1].frame = CGRect(x: -self.view.frame.width, y: self.optionSubviews[self.currentDisplayOption - 1].frame.origin.y, width: self.optionSubviews[self.currentDisplayOption - 1].frame.width, height: self.optionSubviews[self.currentDisplayOption - 1].frame.height)
+                    self.optionSubviews[self.currentDisplayOption].frame = CGRect(x: 30, y: (self.view.frame.height / 2) - (self.optionSubviews[self.currentDisplayOption].figureHeight() / 2), width: self.view.frame.width - 80, height: self.optionSubviews[self.currentDisplayOption].figureHeight())
+                }) { _ in
+                    
+                }
             }
             
         } else if currentDisplayOption == 2 {
