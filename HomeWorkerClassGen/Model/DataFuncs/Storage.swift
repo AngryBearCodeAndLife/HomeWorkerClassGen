@@ -42,7 +42,7 @@ struct DataStorage {
                         if found {
                             Local.save(newProfilePic, completion: { (finished) in
                                 if finished {
-                                    completion(Local.fetch())
+                                    completion(newProfilePic)
                                 } else {
                                     print("Hey! Capt. We have a problem")
                                 }
@@ -151,7 +151,7 @@ struct DataStorage {
                     var success = true
                     
                     do {
-                        try Disk.save(UIImage(named: "NewOrange")!, to: .caches, as: "profileImage.jpeg")
+                        try Disk.remove("profileImage.jpeg", from: .caches)
                     } catch {
                         success = false
                     }
@@ -338,6 +338,37 @@ struct DataStorage {
         
         struct Work {
             
+            static func delete(_ id: String, completion: @escaping (Bool) -> Void) {
+                exists { found, ids in
+                    if found {
+                        var newIds = ids
+                        
+                        for (index, thisId) in newIds.enumerated() {
+                            if thisId == id {
+                                newIds.remove(at: index)
+                                break
+                            }
+                        }
+                        
+                        User.Work.save(newIds, completion: {
+                            completion(true)
+                        })
+                    } else {
+                        print("We should be looking at why the user can delete an object, but the code cant...")
+                    }
+                }
+            }
+            
+            static func save(_ works: [String], completion: @escaping () -> Void) {
+                if let myUID = Auth.auth().currentUser?.uid {
+                    let idRef = Database.database().reference().child("users/\(myUID)/work/")
+                    idRef.setValue(works) { _, _ in
+                        completion()
+                    }
+                }
+                
+            }
+            
             static func save(_ newId: String, completion: @escaping () -> Void) {
                 //This function is going to save the uid to the user. Only called from the WorkObjects.save()
                 
@@ -485,8 +516,9 @@ struct DataStorage {
             Cloud.delete(id) {
                 
                 Local.delete(id)
-                completion()
-                
+                User.Work.delete(id, completion: { _ in
+                    completion()
+                })
             }
             
         }
@@ -564,11 +596,18 @@ struct DataStorage {
         struct Local {
             
             static func delete(_ id: String) {
+                //This is only to remove one work from the local storgae
                 let existingLocalWorks = try? Disk.retrieve("work.json", from: .caches, as: [HomeWork].self)
                 var saveWorks: [HomeWork]! = existingLocalWorks
                 var madeChange = false
                 for (index, work) in saveWorks.enumerated() {
                     if work.uid == id {
+                        
+                        //get rid of all of the imaes that are stored locally for this work
+                        for imageId in work.images {
+                            DataStorage.WorkImages.Local.delete(imageId)
+                        }
+                        
                         saveWorks.remove(at: index)
                         madeChange = true
                     }
@@ -727,11 +766,59 @@ struct DataStorage {
             
         }
         
-        static func delete(andWork: Bool, completion: @escaping () -> Void) {
+        static func delete(andWork: Bool, _ id: String,  completion: @escaping () -> Void) {
             //This will be used to remoe the class from the account. Also, if true, the work will be removed that was paired with the class. This is handy, in cases like cham and google classroom when they dnt know that I am still in their class
+            
+            if andWork {
+                //Delete the work first, and then when that finishes, move onto deleting the class
+                
+                let allClasses = Local.fetch()
+                var thisClass: Classes!
+                
+                for aClass in allClasses {
+                    if aClass.id == id {
+                        thisClass = aClass
+                    }
+                }
+                
+                DataStorage.WorkObjects.fetch { allWorks in
+                    
+                    for work in allWorks {
+                        if work.assignee == thisClass.name {
+                            DataStorage.WorkObjects.delete(work.uid, completion: { })
+                        }
+                    }
+                    deleteClass(id, completion: {
+                        completion()
+                    })
+                }
+                
+            } else {
+                //Just delete the class, leave the work. They can continue to keep the title, but just wont have the ability to talk to the class at all
+                deleteClass(id) {
+                    completion()
+                }
+            }
             
             //NOT EVEN WORRIED ABUOT THIS, GOING TO JUST WAIT UNTIL I NEED IT
             print("You forgot to implement the class delete thingy")
+        }
+        
+        private static func deleteClass(_ id: String, completion: @escaping () -> Void) {
+            fetch { allClasses in
+                
+                var newClasses: [Classes] = allClasses
+                
+                for (index, aClass) in allClasses.enumerated() {
+                    if aClass.id == id {
+                        newClasses.remove(at: index)
+                    }
+                }
+                Local.save(newClasses)
+                Cloud.save(newClasses, completion: {
+                    completion()
+                })
+            }
         }
         
         static func fetch(_ id: String = "", completion: @escaping ([Classes]) -> Void) {
@@ -833,6 +920,16 @@ struct DataStorage {
         }
         
         struct Cloud {
+            
+            static func save(_ newClasses: [Classes], completion: @escaping () -> Void) {
+                if let myUID = Auth.auth().currentUser?.uid {
+                    let path = "users/\(myUID)/classes"
+                    let ref = Database.database().reference().child(path)
+                    ref.setValue(newClasses) { (error, dataRef) in
+                        completion()
+                    }
+                }
+            }
             
             static func fetch(completion: @escaping (Bool, [Classes]) -> Void) {
                 
@@ -954,6 +1051,15 @@ struct DataStorage {
         }
         
         struct Local {
+            
+            static func delete(_ id: String) {
+                do {
+                    try Disk.remove("workImg/\(id).jpeg", from: .caches)
+                } catch {
+                    print("We couldnt delete the specific work that goes with this assignment that you are deleting")
+                }
+            }
+            
             static func delete() {
                 do {
                     try Disk.remove("workImg/", from: .caches)

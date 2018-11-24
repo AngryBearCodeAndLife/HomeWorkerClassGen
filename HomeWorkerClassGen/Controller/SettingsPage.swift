@@ -9,7 +9,7 @@
 import Foundation
 import UIKit
 
-class SettingsPage: UIViewController {
+class SettingsPage: UIViewController, UITextFieldDelegate {
     
     //Use this to hide the status bar
     override var prefersStatusBarHidden: Bool {
@@ -19,11 +19,11 @@ class SettingsPage: UIViewController {
     let profilePictureView = UIImageView()
     
     let slantedViewBack = SlantedView()
-    let nameLabel = UILabel()
+    let nameLabelAndField = UITextField()
     let doneButton = RoundedButtons()
     
+    let manageClasses = RoundedButtons()
     let changePasswordButton = RoundedButtons()
-    let changeUsernameButton = RoundedButtons()
     let changeEmailButton = RoundedButtons()
     let signOutButton = RoundedButtons()
     
@@ -33,16 +33,21 @@ class SettingsPage: UIViewController {
         
         DataStorage.User.Name.fetch { (success, name) in
             if success {
-                self.nameLabel.text = name
+                self.nameLabelAndField.text = name
             }
         }
         
         slantedViewBack.backgroundColor = UIColor.white
         slantedViewBack.frame = CGRect(x: 0, y: 0, width: self.view.frame.width, height: 128)
-        nameLabel.textColor = UIColor.retrieveMainColor(withAlpha: 1.0)
-        nameLabel.font = UIFont.systemFont(ofSize: 38)
-        nameLabel.frame = CGRect(x: 0, y: 40, width: self.view.frame.width, height: 45)
-        nameLabel.textAlignment = .center
+        
+        nameLabelAndField.textColor = UIColor.retrieveMainColor(withAlpha: 1.0)
+        nameLabelAndField.font = UIFont.systemFont(ofSize: 38)
+        nameLabelAndField.frame = CGRect(x: 0, y: 40, width: self.view.frame.width, height: 45)
+        nameLabelAndField.textAlignment = .center
+        nameLabelAndField.borderStyle = .none
+        nameLabelAndField.returnKeyType = UIReturnKeyType.default
+        nameLabelAndField.delegate = self
+        
         doneButton.setTitle("Done", for: .normal)
         doneButton.titleLabel?.font = UIFont.systemFont(ofSize: 19)
         doneButton.titleLabel?.textColor = UIColor.white
@@ -52,7 +57,7 @@ class SettingsPage: UIViewController {
         doneButton.frame = CGRect(x: (self.view.frame.width * 0.75) - 50, y: 100, width: 100, height: 35)
         doneButton.addTarget(self, action: #selector(showMainPage), for: .touchUpInside)
         self.view.addSubview(slantedViewBack)
-        self.view.addSubview(nameLabel)
+        self.view.addSubview(nameLabelAndField)
         self.view.addSubview(doneButton)
         
         self.view.backgroundColor = UIColor.retrieveMainColor(withAlpha: 1.0)
@@ -73,24 +78,25 @@ class SettingsPage: UIViewController {
         profilePictureView.addGestureRecognizer(changeProfileTap)
         
         //Change password button
+        manageClasses.setTitle("Manage Classes", for: .normal)
+        manageClasses.titleLabel?.textColor = UIColor.white
+        manageClasses.borderColor = UIColor.white
+        manageClasses.borderRadius = 10
+        manageClasses.lineWidth = 2
+        manageClasses.addTarget(self, action: #selector(showClassManager), for: .touchUpInside)
+        manageClasses.frame = CGRect(x: (self.view.frame.width/2) - 107.5, y: (self.profilePictureView.frame.origin.y + self.profilePictureView.frame.height) + 72, width: 215, height: 32)
+        manageClasses.titleLabel?.font = UIFont.systemFont(ofSize: 20)
+        self.view.addSubview(manageClasses)
+        
+        //Change username button
         changePasswordButton.setTitle("Change Password", for: .normal)
         changePasswordButton.titleLabel?.textColor = UIColor.white
         changePasswordButton.borderColor = UIColor.white
         changePasswordButton.borderRadius = 10
         changePasswordButton.lineWidth = 2
-        changePasswordButton.frame = CGRect(x: (self.view.frame.width/2) - 107.5, y: (self.profilePictureView.frame.origin.y + self.profilePictureView.frame.height) + 72, width: 215, height: 32)
+        changePasswordButton.frame = CGRect(x: (self.view.frame.width/2) - 107.5, y: (self.profilePictureView.frame.origin.y + self.profilePictureView.frame.height) + 110, width: 215, height: 32)
         changePasswordButton.titleLabel?.font = UIFont.systemFont(ofSize: 20)
         self.view.addSubview(changePasswordButton)
-        
-        //Change username button
-        changeUsernameButton.setTitle("Change Username", for: .normal)
-        changeUsernameButton.titleLabel?.textColor = UIColor.white
-        changeUsernameButton.borderColor = UIColor.white
-        changeUsernameButton.borderRadius = 10
-        changeUsernameButton.lineWidth = 2
-        changeUsernameButton.frame = CGRect(x: (self.view.frame.width/2) - 107.5, y: (self.profilePictureView.frame.origin.y + self.profilePictureView.frame.height) + 110, width: 215, height: 32)
-        changeUsernameButton.titleLabel?.font = UIFont.systemFont(ofSize: 20)
-        self.view.addSubview(changeUsernameButton)
         
         //Change email button
         
@@ -143,6 +149,41 @@ class SettingsPage: UIViewController {
         }
     }
     
+    @objc func showClassManager() {
+        self.present(ClassManagerView(), animated: true, completion: nil)
+    }
+    
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        self.dismissKeyboard()
+        updateName()
+        return true
+    }
+    
+    func updateName() {
+        
+        let choice = UIAlertController(title: "Hold On!", message: "Would you really like to change your name?", preferredStyle: .actionSheet)
+        choice.addAction(UIAlertAction(title: "YES", style: .default, handler: { _ in
+            DataStorage.User.Name.save(self.nameLabelAndField.text!) { finished in
+                if finished {
+                    print("Your name has been changed, billy bob jr")
+                } else {
+                    print("We were not able to change your name. Go to the town office to fix this.")
+                }
+            }
+        }))
+        choice.addAction(UIAlertAction(title: "NO", style: .default, handler: { _ in
+            print("We canceled your request to change your name. Next time, don't bother the office with your stupidity")
+            DataStorage.User.Name.fetch(completion: { (found, name) in
+                if found {
+                    self.nameLabelAndField.text = name
+                } else {
+                    print("Couldn't find your name")
+                }
+            })
+        }))
+        self.present(choice, animated: true, completion: nil)
+    }
+    
     @objc func changeProfileImage() {
         //This funciton is called when the image view has been tapped on.
         imagePicker = UIImagePickerController()
@@ -186,7 +227,7 @@ class SettingsPage: UIViewController {
         UIColor.setMainColor(sender.color)
         //Going to change the colors that you can see here
         UIView.animate(withDuration: 1) {
-            self.nameLabel.textColor = UIColor.retrieveMainColor(withAlpha: 1.0)
+            self.nameLabelAndField.textColor = UIColor.retrieveMainColor(withAlpha: 1.0)
             self.view.backgroundColor = UIColor.retrieveMainColor(withAlpha: 1.0)
         }
         //Going to show that the color is selected by adding a checkmark
@@ -200,6 +241,8 @@ class SettingsPage: UIViewController {
     override func viewDidLoad() {
         
         moveView()
+        
+        self.hideKeyboardWhenTappedAround()
         
     }
     

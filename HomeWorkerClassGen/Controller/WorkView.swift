@@ -53,15 +53,15 @@ class WorkView: UIViewController, UITableViewDelegate, UITableViewDataSource {
     
     func readyBar() {
         
+        middleBox.frame = CGRect(x: 0, y: 80, width: self.view.frame.width, height: 35)
+        middleBox.backgroundColor = UIColor.retrieveMainColor(withAlpha: 0.1)
+        self.view.addSubview(middleBox)
+        
         topBar = TabBar(frame: CGRect(x: 0, y: 0, width: self.view.frame.width, height: 80), leftItem: true)
         topBar.optionSet = ["New Assignment", "New Class"]
         topBar.width = 200
         topBar.parentView = self
         self.view.addSubview(topBar)
-        
-        middleBox.frame = CGRect(x: 0, y: 80, width: self.view.frame.width, height: 35)
-        middleBox.backgroundColor = UIColor.retrieveMainColor(withAlpha: 0.1)
-        self.view.addSubview(middleBox)
         
         placeItemsMiddleBox()
     }
@@ -251,13 +251,16 @@ class WorkView: UIViewController, UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath) -> [UITableViewRowAction]? {
         
         if indexPath.row != self.work.count {
-            let delete = UITableViewRowAction(style: .destructive, title: "Delete") { (action, indexPath) in
+            let delete = UITableViewRowAction(style: .destructive, title: "Destroy") { (action, indexPath) in
                 // delete item at indexPath
                 
-                DataStorage.WorkObjects.delete(self.work[indexPath.row].uid, completion: {
+                DataStorage.User.Work.delete(self.work[indexPath.row].uid, completion: { _ in
+                    DataStorage.WorkObjects.Local.delete(self.work[indexPath.row].uid)
                     self.work.remove(at: indexPath.row)
                     tableView.deleteRows(at: [indexPath], with: .fade)
                 })
+                
+                
                 //Eventually, this should show a little drop down message from the tab bar with an undo button for a few seconds
                 
             }
@@ -266,15 +269,11 @@ class WorkView: UIViewController, UITableViewDelegate, UITableViewDataSource {
         } else {
             return []
         }
-        
-        
-        
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         
         for touch in touches {
-            
             if topBar.isShowingOptions {
                 topBar.optionFunction(touch.location(in: self.view))
             }

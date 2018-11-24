@@ -39,6 +39,7 @@ struct AuthActions {
                     }
                 })
             } else {
+                print("This is the error we are having while signing you up", error)
                 completion(false)
             }
             
@@ -88,16 +89,19 @@ struct AuthActions {
             if authResult != nil && error == nil {
                 DataStorage.AutoLoggin.enable(email: email, password: password, completion: {})
                 DataStorage.User.Name.fetch(completion: { (found, name) in
-                    if found == true && name != "" {
-                        DataStorage.WorkObjects.fetch(completion: { _ in
-                            DataStorage.ClassStorage.pullFromCloud()
-                            completion(true)
-                        })
-                    } else {
-                        completion(false)
-                    }
+                    DataStorage.User.ProfileImage.fetch(completion: { profileImage in
+                        if found == true && name != "" {
+                            DataStorage.WorkObjects.fetch(completion: { _ in
+                                DataStorage.ClassStorage.pullFromCloud()
+                                completion(true)
+                            })
+                        } else {
+                            completion(false)
+                        }
+                    })
                 })
             } else {
+                print("This is the auth error that we are having", error)
                 completion(false)
             }
         }
