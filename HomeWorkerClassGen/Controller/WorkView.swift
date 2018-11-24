@@ -38,6 +38,14 @@ class WorkView: UIViewController, UITableViewDelegate, UITableViewDataSource {
     var dateOrganize: UIButton!
     var classOrganize: UIButton!
     
+    var workInTheBalance: HomeWork!
+    
+    var secondsLeft = 5
+    var canceling = false
+    var deletingWorkIndex = 1000
+    
+    var decreaseDeletionTime: Timer!
+    
     override func viewDidLoad() {
         
         self.view.backgroundColor = UIColor.white
@@ -70,6 +78,7 @@ class WorkView: UIViewController, UITableViewDelegate, UITableViewDataSource {
     
         organizeButton.frame = CGRect(x: 10, y: 2.5, width: 40, height: 30)
         organizeButton.layer.cornerRadius = 15
+        organizeButton.setImage(UIImage(named: "StackNotif"), for: .normal)
         organizeButton.backgroundColor = UIColor.retrieveMainColor(withAlpha: 1.0)
         organizeButton.addTarget(self, action: #selector(organizeDropdown), for: .touchUpInside)
         middleBox.addSubview(organizeButton)
@@ -88,56 +97,60 @@ class WorkView: UIViewController, UITableViewDelegate, UITableViewDataSource {
     
     @objc func organizeDropdown() {
         
-        if isShowingMiddle == false {
-            //Need to create the new organize options here
-            
-            alphaOrganize.backgroundColor = UIColor.retrieveMainColor(withAlpha: 1.0)
-            alphaOrganize.addTarget(self, action: #selector(organizeByName), for: .touchUpInside)
-            alphaOrganize.layer.cornerRadius = 15
-            alphaOrganize.setTitle("By Name", for: .normal)
-            alphaOrganize.setTitleColor(UIColor.white.withAlphaComponent(0.0), for: .normal)
-            
-            dateOrganize.backgroundColor = UIColor.retrieveMainColor(withAlpha: 1.0)
-            dateOrganize.addTarget(self, action: #selector(organizeByDate), for: .touchUpInside)
-            dateOrganize.layer.cornerRadius = 15
-            dateOrganize.setTitle("By Date", for: .normal)
-            dateOrganize.setTitleColor(UIColor.white.withAlphaComponent(0.0), for: .normal)
-            
-            classOrganize.backgroundColor = UIColor.retrieveMainColor(withAlpha: 1.0)
-            classOrganize.addTarget(self, action: #selector(organizeByClass), for: .touchUpInside)
-            classOrganize.layer.cornerRadius = 15
-            classOrganize.setTitle("By Class", for: .normal)
-            classOrganize.setTitleColor(UIColor.white.withAlphaComponent(0.0), for: .normal)
-            middleBox.addSubview(alphaOrganize)
-            middleBox.addSubview(dateOrganize)
-            middleBox.addSubview(classOrganize)
-            
-            UIView.animate(withDuration: 0.5, animations: {
-                self.statusLabel.textColor = UIColor.retrieveMainColor(withAlpha: 0.0)
-                let organizeFrameWidth = (self.view.frame.width - 90) / 3
-                self.alphaOrganize.alpha = 1.0
-                self.dateOrganize.alpha = 1.0
-                self.classOrganize.alpha = 1.0
-                self.alphaOrganize.frame = CGRect(x: 60, y: 2.5, width: organizeFrameWidth, height: 30)
-                self.alphaOrganize.setTitleColor(UIColor.white, for: .normal)
-                self.dateOrganize.frame = CGRect(x: 70 + organizeFrameWidth, y: 2.5, width: organizeFrameWidth, height: 30)
-                self.dateOrganize.setTitleColor(UIColor.white, for: .normal)
-                self.classOrganize.frame = CGRect(x: 80 + (organizeFrameWidth * 2), y: 2.5, width: organizeFrameWidth, height: 30)
-                self.classOrganize.setTitleColor(UIColor.white, for: .normal)
-            }) { _ in
-                self.isShowingMiddle = true
-            }
+        if canceling {
+            cancelDeletion()
         } else {
-            UIView.animate(withDuration: 0.5, animations: {
-                self.statusLabel.textColor = UIColor.retrieveMainColor(withAlpha: 1.0)
-                self.alphaOrganize.frame = self.organizeButton.frame
-                self.dateOrganize.frame = self.organizeButton.frame
-                self.classOrganize.frame = self.organizeButton.frame
-                self.alphaOrganize.alpha = 0.0
-                self.dateOrganize.alpha = 0.0
-                self.classOrganize.alpha = 0.0
-            }) { _ in
-                self.isShowingMiddle = false
+            if isShowingMiddle == false {
+                //Need to create the new organize options here
+                
+                alphaOrganize.backgroundColor = UIColor.retrieveMainColor(withAlpha: 1.0)
+                alphaOrganize.addTarget(self, action: #selector(organizeByName), for: .touchUpInside)
+                alphaOrganize.layer.cornerRadius = 15
+                alphaOrganize.setTitle("By Name", for: .normal)
+                alphaOrganize.setTitleColor(UIColor.white.withAlphaComponent(0.0), for: .normal)
+                
+                dateOrganize.backgroundColor = UIColor.retrieveMainColor(withAlpha: 1.0)
+                dateOrganize.addTarget(self, action: #selector(organizeByDate), for: .touchUpInside)
+                dateOrganize.layer.cornerRadius = 15
+                dateOrganize.setTitle("By Date", for: .normal)
+                dateOrganize.setTitleColor(UIColor.white.withAlphaComponent(0.0), for: .normal)
+                
+                classOrganize.backgroundColor = UIColor.retrieveMainColor(withAlpha: 1.0)
+                classOrganize.addTarget(self, action: #selector(organizeByClass), for: .touchUpInside)
+                classOrganize.layer.cornerRadius = 15
+                classOrganize.setTitle("By Class", for: .normal)
+                classOrganize.setTitleColor(UIColor.white.withAlphaComponent(0.0), for: .normal)
+                middleBox.addSubview(alphaOrganize)
+                middleBox.addSubview(dateOrganize)
+                middleBox.addSubview(classOrganize)
+                
+                UIView.animate(withDuration: 0.5, animations: {
+                    self.statusLabel.textColor = UIColor.retrieveMainColor(withAlpha: 0.0)
+                    let organizeFrameWidth = (self.view.frame.width - 90) / 3
+                    self.alphaOrganize.alpha = 1.0
+                    self.dateOrganize.alpha = 1.0
+                    self.classOrganize.alpha = 1.0
+                    self.alphaOrganize.frame = CGRect(x: 60, y: 2.5, width: organizeFrameWidth, height: 30)
+                    self.alphaOrganize.setTitleColor(UIColor.white, for: .normal)
+                    self.dateOrganize.frame = CGRect(x: 70 + organizeFrameWidth, y: 2.5, width: organizeFrameWidth, height: 30)
+                    self.dateOrganize.setTitleColor(UIColor.white, for: .normal)
+                    self.classOrganize.frame = CGRect(x: 80 + (organizeFrameWidth * 2), y: 2.5, width: organizeFrameWidth, height: 30)
+                    self.classOrganize.setTitleColor(UIColor.white, for: .normal)
+                }) { _ in
+                    self.isShowingMiddle = true
+                }
+            } else {
+                UIView.animate(withDuration: 0.5, animations: {
+                    self.statusLabel.textColor = UIColor.retrieveMainColor(withAlpha: 1.0)
+                    self.alphaOrganize.frame = self.organizeButton.frame
+                    self.dateOrganize.frame = self.organizeButton.frame
+                    self.classOrganize.frame = self.organizeButton.frame
+                    self.alphaOrganize.alpha = 0.0
+                    self.dateOrganize.alpha = 0.0
+                    self.classOrganize.alpha = 0.0
+                }) { _ in
+                    self.isShowingMiddle = false
+                }
             }
         }
     }
@@ -170,6 +183,42 @@ class WorkView: UIViewController, UITableViewDelegate, UITableViewDataSource {
     }
     
 //    A -> Z
+    
+    func verifyDeletion() {
+        print("Tyring to veryify deletion")
+        //Are you sure you want to delete that work?
+        UIView.animate(withDuration: 0.3, animations: {
+            self.organizeButton.setImage(UIImage(named: "BackNotif"), for: .normal)
+            self.statusLabel.text = "Cancel Deletion? 5..."
+        }) { _ in
+            //Create the timer to count down the label
+            self.decreaseDeletionTime = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(self.decreaseTime), userInfo: nil, repeats: true)
+        }
+        
+    }
+    
+    @objc func decreaseTime() {
+        if secondsLeft != 1 {
+            secondsLeft = secondsLeft - 1
+            statusLabel.text = "Cancel Deletion? \(secondsLeft)..."
+        } else {
+            //THis is only run if the deletion wasnt canceled
+            secondsLeft = 5
+            //Reset everything
+            UIView.animate(withDuration: 0.3, animations: {
+                self.organizeButton.setImage(UIImage(named: "StackNotif"), for: .normal)
+                self.statusLabel.text = "Last Update: 5 min ago"
+            }) { _ in
+                DataStorage.User.Work.delete(self.workInTheBalance.uid, completion: { _ in
+                    DataStorage.WorkObjects.Local.delete(self.workInTheBalance.uid)
+                    self.work.remove(at: self.deletingWorkIndex)
+                    self.deletingWorkIndex = 1000
+                    self.canceling = false
+                    self.decreaseDeletionTime.invalidate()
+                })
+            }
+        }
+    }
     
     func placeTableView() {
         
@@ -248,18 +297,39 @@ class WorkView: UIViewController, UITableViewDelegate, UITableViewDataSource {
         }
     }
     
+    func cancelDeletion() {
+        self.work.append(workInTheBalance)
+        //This will make it look like the tableview put back the work that you deleted or didnt delete
+        let range = NSMakeRange(0, self.table.numberOfSections)
+        let sections = NSIndexSet(indexesIn: range)
+        self.table.reloadSections(sections as IndexSet, with: .automatic)
+        
+        decreaseDeletionTime.invalidate()
+        
+        secondsLeft = 5
+        canceling = false
+        deletingWorkIndex = 1000
+        //Reset everything
+        UIView.animate(withDuration: 0.3, animations: {
+            self.organizeButton.setImage(UIImage(named: "StackNotif"), for: .normal)
+            self.statusLabel.text = "Last Update: 5 min ago"
+        })
+        
+    }
+    
     func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath) -> [UITableViewRowAction]? {
         
         if indexPath.row != self.work.count {
             let delete = UITableViewRowAction(style: .destructive, title: "Destroy") { (action, indexPath) in
                 // delete item at indexPath
-                
-                DataStorage.User.Work.delete(self.work[indexPath.row].uid, completion: { _ in
-                    DataStorage.WorkObjects.Local.delete(self.work[indexPath.row].uid)
-                    self.work.remove(at: indexPath.row)
-                    tableView.deleteRows(at: [indexPath], with: .fade)
-                })
-                
+                print("before we are deleting the rows")
+                self.workInTheBalance = self.work[indexPath.row]
+                self.work.remove(at: indexPath.row)
+                tableView.deleteRows(at: [indexPath], with: .fade)
+                print("We have got to deleting thee rows")
+                self.canceling = true
+                self.deletingWorkIndex = indexPath.row
+                self.verifyDeletion()
                 
                 //Eventually, this should show a little drop down message from the tab bar with an undo button for a few seconds
                 

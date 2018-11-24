@@ -210,7 +210,7 @@ class AssignmentView: UIViewController, UICollectionViewDelegate, UICollectionVi
             if indexPath.row < thisWorkImages.count {
                 cell.picture = thisWorkImages[indexPath.row]
             } else {
-                let newImageName = "New" + UIColor.retrieveMainColorName()
+                let newImageName = "New" + UIColor.retrieveMainColorName() + "Collection"
                 cell.picture = UIImage(named: newImageName)
             }
         } else {
@@ -222,6 +222,8 @@ class AssignmentView: UIViewController, UICollectionViewDelegate, UICollectionVi
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         return CGSize(width: 134, height: 165)
     }
+    
+    //Imae size is 114 x 145
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         
