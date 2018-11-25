@@ -1018,7 +1018,7 @@ struct DataStorage {
         
         //NOTE: I have no way of finding these images when I sign back in right now. They will be gone as soon as I sign out forcefully. Well, stuck in storage, but not accessible
         
-        static func newImage(_ image: UIImage, with work: HomeWork, completion: @escaping (Bool) -> Void) {
+        static func newImage(_ image: UIImage, with work: HomeWork, completion: @escaping (Bool, String) -> Void) {
             
             print("Trying to run the newImage function to save it")
             
@@ -1026,13 +1026,13 @@ struct DataStorage {
                 if success {
                     Local.save(image, to: work, with: newKey, completion: { success in
                         if success {
-                            completion(true)
+                            completion(true, newKey)
                         } else {
-                            completion(false)
+                            completion(false, "")
                         }
                     })
                 } else {
-                    completion(false)
+                    completion(false, "")
                 }
             }
             

@@ -31,8 +31,9 @@ class AssignmentView: UIViewController, UICollectionViewDelegate, UICollectionVi
     var dueDateLabel = UILabel()
     
     let layout = UICollectionViewFlowLayout()
-    var pictureCollection: UICollectionView!
-    var noteCollection: UICollectionView!
+    let layout2 = UICollectionViewFlowLayout()
+    var pictureCollection: CustomCollectionViewPhoto!
+    var noteCollection: CustomCollectionViewNotes!
     
     let noteLabel = UILabel()
     let pictureLabel = UILabel()
@@ -51,18 +52,18 @@ class AssignmentView: UIViewController, UICollectionViewDelegate, UICollectionVi
         
         //register the collectoin view class
         pictureCollection.register(AssignmentCell.self, forCellWithReuseIdentifier: "cellId")
-//        noteCollection.register(AssignmentCell.self, forCellWithReuseIdentifier: "cellId")
+        noteCollection.register(AssignmentCell.self, forCellWithReuseIdentifier: "cellId")
         
     }
     
     func setupLabels() {
         
-//        noteLabel.frame = CGRect(x: 6, y: noteCollection.frame.origin.y - 28, width: 100, height: 24)
-//        noteLabel.text = "Notes"
-//        noteLabel.font = UIFont.systemFont(ofSize: 22)
-//        noteLabel.textColor = UIColor.black.withAlphaComponent(0.8)
-//        noteLabel.textAlignment = .left
-//        self.view.addSubview(noteLabel)
+        noteLabel.frame = CGRect(x: 6, y: noteCollection.frame.origin.y - 28, width: 100, height: 24)
+        noteLabel.text = "Notes"
+        noteLabel.font = UIFont.systemFont(ofSize: 22)
+        noteLabel.textColor = UIColor.black.withAlphaComponent(0.8)
+        noteLabel.textAlignment = .left
+        self.view.addSubview(noteLabel)
         
         pictureLabel.frame = CGRect(x: 6, y: pictureCollection.frame.origin.y - 28, width: 100, height: 24)
         pictureLabel.text = "Pictures"
@@ -121,20 +122,22 @@ class AssignmentView: UIViewController, UICollectionViewDelegate, UICollectionVi
     func setupPictureCollection() {
         
         layout.scrollDirection = .horizontal
+        layout2.scrollDirection = .horizontal
         
-        pictureCollection = UICollectionView(frame: CGRect(x: 0, y: self.view.frame.height - 193, width: self.view.frame.width, height: 165), collectionViewLayout: layout)
+        pictureCollection = CustomCollectionViewPhoto(frame: CGRect(x: 0, y: self.view.frame.height - 193, width: self.view.frame.width, height: 165), collectionViewLayout: layout)
+        pictureCollection.hasPhotos = true
         pictureCollection.delegate = self
         pictureCollection.dataSource = self
         pictureCollection.backgroundColor = UIColor.white
         pictureCollection.contentInset = UIEdgeInsets(top: 0, left: 15, bottom: 0, right: 15)
         self.view.addSubview(pictureCollection)
         
-//        noteCollection = UICollectionView(frame: CGRect(x: 0, y: self.view.frame.height - 411, width: self.view.frame.width, height: 165), collectionViewLayout: layout)
-//        noteCollection.delegate = self
-//        noteCollection.dataSource = self
-//        noteCollection.backgroundColor = UIColor.white
-//        noteCollection.contentInset = UIEdgeInsets(top: 0, left: 15, bottom: 0, right: 15)
-//        self.view.addSubview(noteCollection)
+        noteCollection = CustomCollectionViewNotes(frame: CGRect(x: 0, y: self.view.frame.height - 411, width: self.view.frame.width, height: 165), collectionViewLayout: layout2)
+        noteCollection.delegate = self
+        noteCollection.dataSource = self
+        noteCollection.backgroundColor = UIColor.white
+        noteCollection.contentInset = UIEdgeInsets(top: 0, left: 15, bottom: 0, right: 15)
+        self.view.addSubview(noteCollection)
         
     }
     
@@ -171,9 +174,20 @@ class AssignmentView: UIViewController, UICollectionViewDelegate, UICollectionVi
         self.present(imagePicker, animated: true, completion: nil)
     }
     
+    func reloadPictureCollection() {
+        self.thisWorkImages = []
+        for imgId in thisWork.images {
+            print(imgId)
+            thisWorkImages.append(DataStorage.WorkImages.Local.fetch(imgId))
+        }
+        pictureCollection.reloadData()
+    }
+    
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         
-        if collectionView == pictureCollection {
+        
+        
+        if let _ = collectionView as? CustomCollectionViewPhoto {
             //Return the number of pictures in the homework assignment
             print("We are giving the picturw colection view this many images", thisWorkImages.count)
             return thisWorkImages.count + 1
@@ -190,7 +204,7 @@ class AssignmentView: UIViewController, UICollectionViewDelegate, UICollectionVi
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        if collectionView == pictureCollection {
+        if let _ = collectionView as? CustomCollectionViewPhoto {
             if indexPath.row == thisWorkImages.count {
                 newPicture()
             } else {
@@ -205,7 +219,7 @@ class AssignmentView: UIViewController, UICollectionViewDelegate, UICollectionVi
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         print("This is the indexpath.row that i am talkign about", indexPath.row)
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "cellId", for: indexPath) as! AssignmentCell
-        if collectionView == pictureCollection {
+        if let _ = collectionView as? CustomCollectionViewPhoto {
             print(indexPath)
             if indexPath.row < thisWorkImages.count {
                 cell.picture = thisWorkImages[indexPath.row]
@@ -246,10 +260,11 @@ extension AssignmentView: UIImagePickerControllerDelegate, UINavigationControlle
         if let pickedImage = info[UIImagePickerController.InfoKey.originalImage] as? UIImage {
             print("Is trying to save the image")
             //use pickedImage to go to the dataStorage, and save the picture to the assignment
-            DataStorage.WorkImages.newImage(pickedImage, with: thisWork) { _ in
+            DataStorage.WorkImages.newImage(pickedImage, with: thisWork) { result, newKey in
                 
-                self.thisWorkImages.append(pickedImage)
-                self.pictureCollection.reloadData()
+//                self.thisWorkImages.append(pickedImage)
+                self.thisWork.images.append(newKey)
+                self.reloadPictureCollection()
                 
                 print("Successfully saved the image and the workn\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n")
             }
@@ -257,3 +272,6 @@ extension AssignmentView: UIImagePickerControllerDelegate, UINavigationControlle
         picker.dismiss(animated: true, completion: nil)
     }
 }
+
+class CustomCollectionViewPhoto: UICollectionView { var hasPhotos = false }
+class CustomCollectionViewNotes: UICollectionView { }
